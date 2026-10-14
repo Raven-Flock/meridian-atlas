@@ -81,6 +81,17 @@ function clip(points: string) {
   return `polygon(${pairs.join(", ")})`;
 }
 
+/** Map percent points into a 100×150 viewBox so the blur stays round on a 2:3 photo. */
+function glowPoints(points: string) {
+  return points
+    .split(" ")
+    .map((pair) => {
+      const [x, y] = pair.split(",");
+      return `${x},${(Number(y) * 1.5).toFixed(2)}`;
+    })
+    .join(" ");
+}
+
 export function BodyRegions({ active }: { active?: string }) {
   const [side, setSide] = useState<Side>(active === "back" ? "back" : "front");
   const [hot, setHot] = useState<RegionId | null>(null);
@@ -113,8 +124,34 @@ export function BodyRegions({ active }: { active?: string }) {
         <img
           src={`${import.meta.env.BASE_URL}atlas/menu-${side}.jpg`}
           alt=""
-          className="w-full rounded-2xl shadow-card"
+          className="pointer-events-none w-full rounded-2xl shadow-card"
         />
+        <svg viewBox="0 0 100 150" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden="true">
+          <defs>
+            <filter id="region-glow" x="-80%" y="-80%" width="260%" height="260%" colorInterpolationFilters="sRGB">
+              <feGaussianBlur stdDeviation="1.1" result="tight" />
+              <feGaussianBlur stdDeviation="3.2" result="wide" />
+              <feMerge>
+                <feMergeNode in="wide" />
+                <feMergeNode in="tight" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          {visible.map((zone, index) =>
+            shown === zone.id ? (
+              <polygon
+                key={`glow-${zone.side}-${zone.id}-${index}`}
+                points={glowPoints(zone.points)}
+                fill="rgba(255, 228, 186, 0.28)"
+                stroke="#fff1d4"
+                strokeWidth="1.35"
+                strokeLinejoin="round"
+                filter="url(#region-glow)"
+              />
+            ) : null,
+          )}
+        </svg>
         {visible.map((zone, index) => {
           const lit = shown === zone.id;
           const label = REGIONS.find((item) => item.id === zone.id)?.label ?? zone.id;
@@ -125,13 +162,15 @@ export function BodyRegions({ active }: { active?: string }) {
               search={{ ...emptyPointFilters, region: zone.id }}
               aria-label={label}
               onPointerEnter={() => setHot(zone.id)}
+              onPointerDown={() => setHot(zone.id)}
               onPointerLeave={() => setHot((current) => (current === zone.id ? null : current))}
               onFocus={() => setHot(zone.id)}
               onBlur={() => setHot((current) => (current === zone.id ? null : current))}
               className="absolute inset-0"
               style={{
                 clipPath: clip(zone.points),
-                background: lit ? "rgba(196, 161, 90, 0.42)" : "transparent",
+                background: lit ? "rgba(255, 220, 170, 0.28)" : "transparent",
+                mixBlendMode: lit ? "screen" : "normal",
                 WebkitTapHighlightColor: "transparent",
               }}
             />
@@ -144,7 +183,7 @@ export function BodyRegions({ active }: { active?: string }) {
             <span className="text-paper">{region.label}.</span> {region.hint}
           </>
         ) : (
-          "Hover or press a region to open it. Back shows the spine and the shoulder blades."
+          "Press a region. It glows, then opens those points. Back shows the spine and the shoulder blades."
         )}
       </p>
       <div className="mt-3 grid grid-cols-2 gap-2">
