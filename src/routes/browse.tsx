@@ -44,7 +44,7 @@ function Heading({ title, text }: { title: string; text: string }) {
 function Regions() {
   return (
     <>
-      <Heading title="Body regions" text="The drawing faces you. The back is the plate on the right. Tap a button to open that region." />
+      <Heading title="Body regions" text="Tap the figure, or a name below. Switch to the back for the spine." />
       <div className="mt-4">
         <BodyRegions />
       </div>

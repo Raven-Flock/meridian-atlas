@@ -127,9 +127,7 @@ function ExplorePage() {
           <section className="mt-8">
             <SectionTitle>Where to look</SectionTitle>
             <BodyRegions />
-            <p className="mt-3 text-sm leading-relaxed text-muted">
-              The figure is a map, not a body to treat. Use the buttons under it. It faces you, so the back is drawn to the side.
-            </p>
+            <p className="mt-3 text-sm leading-relaxed text-muted">The figure is a map, not a body to treat. Tap a region, or use the list.</p>
           </section>
 
           <section className="mt-8">
