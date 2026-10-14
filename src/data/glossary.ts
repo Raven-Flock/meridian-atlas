@@ -9,8 +9,8 @@ export type GlossaryEntry = {
 
 /** Longer phrases must be listed; the linker matches the longest phrase first. */
 export const GLOSSARY: GlossaryEntry[] = [
-  { id: "cun", phrase: "cun", group: "Measurements", definition: "A proportional body inch, not a ruler inch. 1 cun is about the width of the thumb at the interphalangeal joint. Three finger-breadths are about 2 cun. Bone lengths (forearm, lower leg) are divided into set cun on charts." },
-  { id: "finger-breadth", phrase: "finger-breadth", group: "Measurements", definition: "The width of one finger used as a rough cun. One finger-breadth is often taken as about 0.5–1 cun, depending on the chart. It is a finding aid, not a precise instrument." },
+  { id: "cun", phrase: "cun", group: "Measurements", definition: "A proportional body inch, not a ruler inch. About 1 cun is the width of your thumb at the joint. Four fingers held together are about 3 cun. The forearm from elbow crease to wrist crease is 12 cun. The lower leg from the knee crease to the tip of the outer ankle is 16 cun. Use the same person’s proportions, not a tape measure." },
+  { id: "finger-breadth", phrase: "finger-breadth", group: "Measurements", definition: "The width of one finger laid flat. Charts often treat one finger-breadth as a small step beside a bone, and three finger-breadths as about 2 cun. It is a finding aid." },
   { id: "midline", phrase: "midline", group: "Measurements", definition: "The imaginary line down the centre of the body, front or back. Ren lies on the front midline. Du lies on the back and head midline." },
   { id: "anterior-midline", phrase: "anterior midline", group: "Measurements", definition: "The front midline, from the sternum through the navel to the pubic bone. Chest and abdomen points are often counted in cun out from this line." },
   { id: "posterior-hairline", phrase: "posterior hairline", group: "Landmarks", definition: "The natural hairline at the nape. If the hair has receded, charts still use the original line." },

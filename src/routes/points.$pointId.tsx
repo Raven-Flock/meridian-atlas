@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { BackLink, HerbCard, PointCard, RoleLine, SavePointButton } from "@/components/pieces";
 import { LinkedText } from "@/components/linked-text";
+import { PointFigureButton } from "@/components/locate-figure";
+import { finding } from "@/data/locate";
 import { ELECTRO_COPY, emptyPointFilters, getPoint, herbsForPoint, relatedPoints } from "@/data/catalog";
 import { getChannel } from "@/data/channels";
 import { ELEMENT_TEXT, regionLabel, safetyLabel, symptomLabel } from "@/data/labels";
@@ -36,6 +38,7 @@ function PointPage() {
   const herbs = herbsForPoint(point);
   const related = relatedPoints(point);
   const element = channel?.element;
+  const place = finding(point);
 
   return (
     <article>
@@ -53,17 +56,13 @@ function PointPage() {
           {point.hanzi} · {point.pinyin}
         </p>
         <p className="mt-1 text-lg text-muted">{point.english}</p>
-        <p className="mt-4 text-xs tracking-wide text-faint uppercase">Location</p>
+        <p className="mt-4 text-xs tracking-wide text-faint uppercase">Quick locate</p>
         <p className="mt-1 text-lg leading-snug text-paper">
-          <LinkedText text={point.location} />
+          <LinkedText text={place.quick} />
         </p>
-        <p className="mt-2 text-sm text-faint">
-          Dotted words open the{" "}
-          <Link to="/glossary" className="text-earth">
-            glossary
-          </Link>
-          .
-        </p>
+        <div className="mt-4">
+          <PointFigureButton point={point} />
+        </div>
         <p className="mt-3 text-base leading-relaxed text-paper">{point.summary}</p>
         <RoleLine point={point} />
         {point.safety !== "general" ? (
@@ -87,11 +86,26 @@ function PointPage() {
         ) : null}
       </Section>
 
-      <Section title="Where it is">
+      <Section title="How to find it">
         <p className="text-base leading-relaxed text-paper">
-          <LinkedText text={point.location} />
+          <LinkedText text={place.how} />
+        </p>
+        {place.alt ? (
+          <p className="mt-3 text-sm leading-relaxed text-muted">
+            Another way: <LinkedText text={place.alt} />
+          </p>
+        ) : null}
+        <p className="mt-3 text-sm leading-relaxed text-paper">
+          Chart line: <LinkedText text={point.location} />
         </p>
         <p className="mt-2 text-sm leading-relaxed text-muted">Nearby: {point.nearby}</p>
+        <p className="mt-2 text-sm text-faint">
+          Dotted words open the{" "}
+          <Link to="/glossary" className="text-earth">
+            glossary
+          </Link>
+          . The drawing shows the area. The steps are the location.
+        </p>
       </Section>
 
       <Section title="Traditionally said to">

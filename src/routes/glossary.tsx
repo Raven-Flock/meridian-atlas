@@ -20,8 +20,16 @@ function GlossaryPage() {
       <p className="text-sm text-earth">Finding words</p>
       <h1 className="mt-1 font-serif text-4xl">Glossary</h1>
       <p className="mt-2 text-base leading-relaxed text-muted">
-        Short definitions for the words in point locations. A cun is a body proportion, not a treatment unit.
+        Short definitions for the words in the finding steps. A cun is a body proportion, not a treatment unit.
       </p>
+      <section className="mt-4 rounded-2xl bg-panel p-4 shadow-card">
+        <h2 className="font-serif text-2xl">How to measure a cun</h2>
+        <ul className="mt-2 grid gap-2 text-sm leading-relaxed text-muted">
+          <li>Thumb: the width of the thumb at the joint is about 1 cun.</li>
+          <li>Four fingers: the width of the index through little finger, held together, is about 3 cun.</li>
+          <li>Forearm: elbow crease to wrist crease is 12 cun. Lower leg: knee to the outer ankle tip is 16 cun.</li>
+        </ul>
+      </section>
       <label className="mt-4 block">
         <span className="sr-only">Search glossary</span>
         <input

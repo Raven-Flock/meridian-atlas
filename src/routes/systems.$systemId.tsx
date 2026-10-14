@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BackLink, ElementDot, HerbCard, PointCard } from "@/components/pieces";
 import { ElementCycle } from "@/components/diagrams";
+import { ChannelMap } from "@/components/locate-figure";
 import { herbsForChannel, pointsInChannel } from "@/data/catalog";
 import { CHANNELS, getChannel } from "@/data/channels";
 import { ELEMENT_TEXT, ELEMENTS } from "@/data/labels";
@@ -56,6 +57,9 @@ function ChannelPage({ id }: { id: string }) {
         {channel.alias ? <p className="mt-2 text-sm text-muted">{channel.alias}</p> : null}
       </header>
       <p className="mt-4 text-base leading-relaxed">{channel.pathway}</p>
+      <div className="mt-4">
+        <ChannelMap channelId={channel.id} points={points} />
+      </div>
       <p className="mt-2 text-sm leading-relaxed text-muted">{channel.note}</p>
       <ul className="mt-4 grid gap-2">
         {channel.themes.map((theme) => (
