@@ -39,39 +39,14 @@ export function ElementCycle({ highlight }: { highlight?: ElementId | null }) {
   );
 }
 
-const INK = "fill-ink stroke-current";
-
 export function BodyRegions({ active }: { active?: string }) {
   return (
     <div>
-      <svg viewBox="0 0 240 280" className="pointer-events-none mx-auto w-full max-w-xs text-faint" role="img" aria-hidden="true">
-        <rect x="176" y="78" width="48" height="112" rx="14" className={INK} strokeWidth="1.6" />
-        <text x="200" y="138" textAnchor="middle" fontSize="12" className="fill-muted font-sans">
-          Back
-        </text>
-        <circle cx="86" cy="36" r="24" className={INK} strokeWidth="1.6" />
-        <text x="86" y="40" textAnchor="middle" fontSize="12" className="fill-muted font-sans">
-          Head
-        </text>
-        <ellipse cx="114" cy="36" rx="8" ry="12" className={INK} strokeWidth="1.6" />
-        <rect x="74" y="62" width="24" height="18" rx="6" className={INK} strokeWidth="1.6" />
-        <rect x="58" y="84" width="56" height="46" rx="12" className={INK} strokeWidth="1.6" />
-        <text x="86" y="112" textAnchor="middle" fontSize="12" className="fill-muted font-sans">
-          Chest
-        </text>
-        <rect x="26" y="88" width="26" height="52" rx="12" className={INK} strokeWidth="1.6" />
-        <rect x="120" y="88" width="26" height="52" rx="12" className={INK} strokeWidth="1.6" />
-        <rect x="27" y="144" width="24" height="22" rx="8" className={INK} strokeWidth="1.6" />
-        <rect x="121" y="144" width="24" height="22" rx="8" className={INK} strokeWidth="1.6" />
-        <rect x="66" y="134" width="40" height="38" rx="10" className={INK} strokeWidth="1.6" />
-        <text x="86" y="158" textAnchor="middle" fontSize="12" className="fill-muted font-sans">
-          Belly
-        </text>
-        <rect x="64" y="180" width="18" height="62" rx="8" className={INK} strokeWidth="1.6" />
-        <rect x="90" y="180" width="18" height="62" rx="8" className={INK} strokeWidth="1.6" />
-        <rect x="58" y="246" width="26" height="16" rx="6" className={INK} strokeWidth="1.6" />
-        <rect x="88" y="246" width="26" height="16" rx="6" className={INK} strokeWidth="1.6" />
-      </svg>
+      <img
+        src={`${import.meta.env.BASE_URL}atlas/body-front.jpg`}
+        alt="Clothed standing figure. Region buttons are below."
+        className="mx-auto w-full max-w-xs rounded-2xl shadow-card"
+      />
       <div className="mt-4 grid grid-cols-2 gap-2">
         {REGIONS.map((region) => {
           const on = active === region.id;
