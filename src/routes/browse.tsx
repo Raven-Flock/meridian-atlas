@@ -164,6 +164,10 @@ function Extra() {
   return (
     <>
       <Heading title="Extra systems" text="Kept apart from the twelve primary channels so the maps do not blur." />
+      <Link to="/points" search={{ ...emptyPointFilters, kind: "window" }} className="mt-4 block min-h-16 rounded-2xl bg-panel px-4 py-3 shadow-card">
+        <span className="block text-base">Heavenly Gates</span>
+        <span className="text-sm text-muted">The ten Window of Heaven points, as one study set.</span>
+      </Link>
       <ul className="mt-4 grid gap-2">
         {links.map((link) => (
           <li key={link.id}>

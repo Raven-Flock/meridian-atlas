@@ -51,7 +51,11 @@ export const KINDS: { id: KindId; label: string; hint: string }[] = [
   { id: "extra", label: "Extra point", hint: "Outside the 14 channels" },
   { id: "opening", label: "Opening", hint: "Opens an extraordinary vessel" },
   { id: "influential", label: "Influential", hint: "Hui-meeting points" },
+  { id: "window", label: "Heavenly Gates", hint: "Window of Heaven points" },
 ];
+
+export const WINDOW_NOTE =
+  "Traditionally taught as a Window of Heaven point, one of the Heavenly Gates, where qi and blood are said to pass between the head and the body. Study language only, not a treatment.";
 
 export const HERB_ACTIONS: { id: HerbActionId; label: string; hint: string }[] = [
   { id: "release-exterior", label: "Release exterior", hint: "Surface wind-cold or wind-heat" },

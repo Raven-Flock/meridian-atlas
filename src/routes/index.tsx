@@ -103,6 +103,15 @@ function ExplorePage() {
             </div>
           </section>
 
+          <Link
+            to="/points"
+            search={{ ...emptyPointFilters, kind: "window" }}
+            className="mt-3 flex min-h-20 flex-col justify-center rounded-2xl bg-panel px-4 py-3 shadow-card"
+          >
+            <span className="text-base text-paper">Heavenly Gates</span>
+            <span className="mt-1 text-sm text-muted">The ten Window of Heaven points, studied as gates between the head and the body.</span>
+          </Link>
+
           <section className="mt-8">
             <SectionTitle
               aside={

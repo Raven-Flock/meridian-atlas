@@ -4,7 +4,7 @@ import { FilterButton, PointFilterSheet } from "@/components/filters";
 import { Chip, EmptyState, PointCard, SearchField } from "@/components/pieces";
 import { activePointFilterCount, emptyPointFilters, filterPoints, pointFilterLabels, filtersFromPointSearch } from "@/data/catalog";
 import { getChannel } from "@/data/channels";
-import { SYMPTOMS } from "@/data/labels";
+import { SYMPTOMS, WINDOW_NOTE } from "@/data/labels";
 import type { PointFilters } from "@/data/types";
 
 export const Route = createFileRoute("/points/")({
@@ -30,7 +30,9 @@ function PointsPage() {
     <main>
       <h1 className="font-serif text-4xl">Points</h1>
       <p className="mt-2 text-base leading-relaxed text-muted">
-        Well-known points from the twelve channels, Ren, Du, and a short extra set. The rest of the classical numbers can be added beside them.
+        {filters.kind === "window"
+          ? `Heavenly Gates. ${WINDOW_NOTE} Ten points.`
+          : "Well-known points from the twelve channels, Ren, Du, and a short extra set. The rest of the classical numbers can be added beside them."}
       </p>
       <div className="mt-4 flex gap-2">
         <div className="min-w-0 flex-1">

@@ -5,8 +5,8 @@ import { LinkedText } from "@/components/linked-text";
 import { PointFigureButton } from "@/components/locate-figure";
 import { finding } from "@/data/locate";
 import { ELECTRO_COPY, emptyPointFilters, getPoint, herbsForPoint, relatedPoints } from "@/data/catalog";
+import { ELEMENT_TEXT, regionLabel, safetyLabel, symptomLabel, WINDOW_NOTE } from "@/data/labels";
 import { getChannel } from "@/data/channels";
-import { ELEMENT_TEXT, regionLabel, safetyLabel, symptomLabel } from "@/data/labels";
 import { remember } from "@/lib/saved";
 import { cn } from "@/lib/cn";
 
@@ -65,6 +65,14 @@ function PointPage() {
         </div>
         <p className="mt-3 text-base leading-relaxed text-paper">{point.summary}</p>
         <RoleLine point={point} />
+        {point.kinds.includes("window") ? (
+          <p className="mt-3 text-sm leading-relaxed text-muted">
+            {WINDOW_NOTE}{" "}
+            <Link to="/points" search={{ ...emptyPointFilters, kind: "window" }} className="text-earth">
+              Open the Heavenly Gates set.
+            </Link>
+          </p>
+        ) : null}
         {point.safety !== "general" ? (
           <p className={cn("mt-2 text-sm", point.safety === "pregnancy" ? "text-fire" : "text-earth")}>{safetyLabel(point.safety)}</p>
         ) : null}

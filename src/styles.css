@@ -77,6 +77,50 @@
   display: none;
 }
 
+button,
+a.rounded-full,
+a.rounded-2xl,
+a.rounded-xl,
+a.rounded-3xl,
+summary,
+.tabbar a {
+  transition: box-shadow 180ms ease;
+}
+
+@media (hover: hover) {
+  button:hover,
+  a.rounded-full:hover,
+  a.rounded-2xl:hover,
+  a.rounded-xl:hover,
+  a.rounded-3xl:hover,
+  summary:hover,
+  .tabbar a:hover {
+    box-shadow:
+      0 0 0 1px rgba(255, 236, 210, 0.42),
+      0 0 14px rgba(226, 176, 84, 0.38),
+      0 0 26px rgba(196, 132, 48, 0.18);
+  }
+}
+
+button:active,
+a.rounded-full:active,
+a.rounded-2xl:active,
+a.rounded-xl:active,
+a.rounded-3xl:active,
+summary:active,
+.tabbar a:active,
+button:focus-visible,
+a.rounded-full:focus-visible,
+a.rounded-2xl:focus-visible,
+a.rounded-xl:focus-visible,
+a.rounded-3xl:focus-visible,
+summary:focus-visible,
+.tabbar a:focus-visible {
+  box-shadow:
+    0 0 0 1px rgba(255, 236, 210, 0.55),
+    0 0 18px rgba(226, 176, 84, 0.48);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

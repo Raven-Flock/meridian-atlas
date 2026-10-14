@@ -49,7 +49,8 @@ export type KindId =
   | "command"
   | "extra"
   | "opening"
-  | "influential";
+  | "influential"
+  | "window";
 
 export type SafetyId = "general" | "caution" | "pregnancy";
 export type ElectroId = "none" | "pain-research" | "nausea-research";
