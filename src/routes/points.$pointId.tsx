@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { BackLink, HerbCard, PointCard, RoleLine, SavePointButton } from "@/components/pieces";
+import { LinkedText } from "@/components/linked-text";
 import { ELECTRO_COPY, emptyPointFilters, getPoint, herbsForPoint, relatedPoints } from "@/data/catalog";
 import { getChannel } from "@/data/channels";
 import { ELEMENT_TEXT, regionLabel, safetyLabel, symptomLabel } from "@/data/labels";
@@ -52,6 +53,17 @@ function PointPage() {
           {point.hanzi} · {point.pinyin}
         </p>
         <p className="mt-1 text-lg text-muted">{point.english}</p>
+        <p className="mt-4 text-xs tracking-wide text-faint uppercase">Location</p>
+        <p className="mt-1 text-lg leading-snug text-paper">
+          <LinkedText text={point.location} />
+        </p>
+        <p className="mt-2 text-sm text-faint">
+          Dotted words open the{" "}
+          <Link to="/glossary" className="text-earth">
+            glossary
+          </Link>
+          .
+        </p>
         <p className="mt-3 text-base leading-relaxed text-paper">{point.summary}</p>
         <RoleLine point={point} />
         {point.safety !== "general" ? (
@@ -76,7 +88,9 @@ function PointPage() {
       </Section>
 
       <Section title="Where it is">
-        <p className="text-base leading-relaxed text-paper">{point.location}</p>
+        <p className="text-base leading-relaxed text-paper">
+          <LinkedText text={point.location} />
+        </p>
         <p className="mt-2 text-sm leading-relaxed text-muted">Nearby: {point.nearby}</p>
       </Section>
 
@@ -84,6 +98,7 @@ function PointPage() {
         <p className="text-base leading-relaxed text-paper">{point.actions}</p>
       </Section>
 
+      {point.symptoms.length > 0 ? (
       <Section title="What people look up">
         <div className="flex flex-wrap gap-2">
           {point.symptoms.map((symptom) => (
@@ -98,6 +113,7 @@ function PointPage() {
           ))}
         </div>
       </Section>
+      ) : null}
 
       <Section title="Acupressure">
         <p className="text-base leading-relaxed text-paper">{point.press}</p>

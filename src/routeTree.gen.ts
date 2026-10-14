@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BrowseRouteImport } from './routes/browse'
+import { Route as GlossaryRouteImport } from './routes/glossary'
 import { Route as SavedRouteImport } from './routes/saved'
 import { Route as HerbsIndexRouteImport } from './routes/herbs.index'
 import { Route as HerbsHerbIdRouteImport } from './routes/herbs.$herbId'
@@ -29,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
 const BrowseRoute = BrowseRouteImport.update({
   id: '/browse',
   path: '/browse',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GlossaryRoute = GlossaryRouteImport.update({
+  id: '/glossary',
+  path: '/glossary',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SavedRoute = SavedRouteImport.update({
@@ -80,6 +86,7 @@ const SystemsSystemIdRoute = SystemsSystemIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
+  '/glossary': typeof GlossaryRoute
   '/saved': typeof SavedRoute
   '/herbs/$herbId': typeof HerbsHerbIdRoute
   '/points/$pointId': typeof PointsPointIdRoute
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
+  '/glossary': typeof GlossaryRoute
   '/saved': typeof SavedRoute
   '/herbs/$herbId': typeof HerbsHerbIdRoute
   '/points/$pointId': typeof PointsPointIdRoute
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
+  '/glossary': typeof GlossaryRoute
   '/saved': typeof SavedRoute
   '/herbs/$herbId': typeof HerbsHerbIdRoute
   '/points/$pointId': typeof PointsPointIdRoute
@@ -122,6 +131,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/browse'
+    | '/glossary'
     | '/saved'
     | '/herbs/$herbId'
     | '/points/$pointId'
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/browse'
+    | '/glossary'
     | '/saved'
     | '/herbs/$herbId'
     | '/points/$pointId'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/browse'
+    | '/glossary'
     | '/saved'
     | '/herbs/$herbId'
     | '/points/$pointId'
@@ -162,6 +174,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BrowseRoute: typeof BrowseRoute
+  GlossaryRoute: typeof GlossaryRoute
   SavedRoute: typeof SavedRoute
   HerbsHerbIdRoute: typeof HerbsHerbIdRoute
   PointsPointIdRoute: typeof PointsPointIdRoute
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/browse'
       fullPath: '/browse'
       preLoaderRoute: typeof BrowseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/glossary': {
+      id: '/glossary'
+      path: '/glossary'
+      fullPath: '/glossary'
+      preLoaderRoute: typeof GlossaryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/saved': {
@@ -258,6 +278,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BrowseRoute: BrowseRoute,
+  GlossaryRoute: GlossaryRoute,
   SavedRoute: SavedRoute,
   HerbsHerbIdRoute: HerbsHerbIdRoute,
   PointsPointIdRoute: PointsPointIdRoute,

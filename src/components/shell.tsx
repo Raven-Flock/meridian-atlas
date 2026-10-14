@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Bookmark, Compass, Leaf, MapPinned, Waypoints } from "lucide-react";
+import { Bookmark, BookOpen, Compass, Leaf, MapPinned, Waypoints } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { DISCLAIMER } from "@/data/labels";
 import { acceptDisclaimer, useSaved } from "@/lib/saved";
@@ -44,6 +44,10 @@ export function Shell({ children }: { children: ReactNode }) {
               <span className="mt-1 block text-xs tracking-wide text-faint uppercase">Channels, points, herbs</span>
             </span>
           </Link>
+          <Link to="/glossary" className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted">
+            <BookOpen className="size-4" strokeWidth={1.75} />
+            Glossary
+          </Link>
         </div>
       </header>
       <div className="mx-auto w-full max-w-3xl px-4 pt-4 pb-36">
@@ -69,6 +73,11 @@ export function Shell({ children }: { children: ReactNode }) {
         {children}
         <footer className="mt-10 border-t border-line pt-4">
           <p className="text-sm leading-relaxed text-faint">{DISCLAIMER}</p>
+          <p className="mt-2 text-sm">
+            <Link to="/glossary" className="text-earth">
+              Glossary of location terms
+            </Link>
+          </p>
         </footer>
       </div>
       <nav className="tabbar fixed inset-x-0 bottom-0 z-30 border-t border-line bg-ink/95 backdrop-blur-md" aria-label="Primary">

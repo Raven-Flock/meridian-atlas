@@ -1,6 +1,7 @@
 import { CHANNELS, CHANNEL_ORDER, getChannel } from "./channels";
 import { HERBS } from "./herbs";
 import { actionLabel, elementLabel, kindLabel, regionLabel, symptomLabel } from "./labels";
+import { FILL_POINTS } from "./points-fill";
 import { LOWER_POINTS } from "./points-lower";
 import { REST_POINTS } from "./points-rest";
 import { UPPER_POINTS } from "./points-upper";
@@ -12,7 +13,7 @@ import type { ElectroId, Herb, HerbFilters, Point, PointFilters } from "./types"
  * channel (upper arm, lower/back, or ren-du-extra) with the right `order`.
  * Keep the id stable: saves and links use it.
  */
-export const POINTS: Point[] = [...UPPER_POINTS, ...LOWER_POINTS, ...REST_POINTS];
+export const POINTS: Point[] = [...UPPER_POINTS, ...LOWER_POINTS, ...REST_POINTS, ...FILL_POINTS];
 
 export { CHANNELS, HERBS, ROUTINES, getChannel, getRoutine };
 

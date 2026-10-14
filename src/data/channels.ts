@@ -2,8 +2,7 @@ import type { Channel } from "./types";
 
 /**
  * Primary channels in classical clock order, then Ren and Du.
- * `classicalCount` is the full numbered set. This atlas ships the points
- * people look up first. Add the rest in the matching points file by `order`.
+ * `classicalCount` is the full numbered set. Every classical number is in the atlas.
  */
 export const CHANNELS: Channel[] = [
   {
