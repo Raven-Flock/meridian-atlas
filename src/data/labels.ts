@@ -58,19 +58,19 @@ export const WINDOW_NOTE =
   "Traditionally taught as a Window of Heaven point, one of the Heavenly Gates, where qi and blood are said to pass between the head and the body. Study language only, not a treatment.";
 
 export const HERB_ACTIONS: { id: HerbActionId; label: string; hint: string }[] = [
-  { id: "release-exterior", label: "Release exterior", hint: "Surface wind-cold or wind-heat" },
-  { id: "clear-heat", label: "Clear heat", hint: "Cool a hot pattern" },
-  { id: "drain-damp", label: "Drain damp", hint: "Heaviness, swelling, damp" },
-  { id: "transform-phlegm", label: "Transform phlegm", hint: "Phlegm in the chest or middle" },
-  { id: "move-qi", label: "Move qi", hint: "Stuck, tight, or distended" },
-  { id: "move-blood", label: "Move blood", hint: "Fixed pain, stasis language" },
-  { id: "tonify-qi", label: "Tonify qi", hint: "Tiredness, weak appetite" },
-  { id: "tonify-blood", label: "Tonify blood", hint: "Dryness, pallor, cycles" },
-  { id: "tonify-yang", label: "Tonify yang", hint: "Cold, low back, vitality" },
-  { id: "tonify-yin", label: "Tonify yin", hint: "Dryness, nights, fluids" },
-  { id: "calm-shen", label: "Calm shen", hint: "Spirit, sleep, restlessness" },
-  { id: "extinguish-wind", label: "Extinguish wind", hint: "Internal wind teaching patterns" },
-  { id: "stabilize-bind", label: "Stabilize and bind", hint: "Leakage, holding" },
+  { id: "release-exterior", label: "Release exterior", hint: "First-day colds and chills" },
+  { id: "clear-heat", label: "Clear heat", hint: "Patterns that feel hot or irritable" },
+  { id: "drain-damp", label: "Drain damp", hint: "Heaviness, puffiness, waterlogged digestion" },
+  { id: "transform-phlegm", label: "Transform phlegm", hint: "Nausea, mucus, a thick stuck feeling" },
+  { id: "move-qi", label: "Move qi", hint: "Bloating and a stuck feeling in the ribs" },
+  { id: "move-blood", label: "Move blood", hint: "Fixed aches and stuck-cycle language" },
+  { id: "tonify-qi", label: "Tonify qi", hint: "Tiredness and a weak appetite" },
+  { id: "tonify-blood", label: "Tonify blood", hint: "Dryness and cycle depletion" },
+  { id: "tonify-yang", label: "Tonify yang", hint: "Cold limbs and low vitality" },
+  { id: "tonify-yin", label: "Tonify yin", hint: "Dryness, thirst, and night heat" },
+  { id: "calm-shen", label: "Calm shen", hint: "Sleep and a restless mind" },
+  { id: "extinguish-wind", label: "Extinguish wind", hint: "Dizziness and head tension, in textbook language" },
+  { id: "stabilize-bind", label: "Stabilize and bind", hint: "Weakness that seems not to hold" },
 ];
 
 export const SAFETY: { id: SafetyId; label: string; hint: string }[] = [

@@ -5,7 +5,20 @@ import { Chip, EmptyState, HerbCard, SearchField } from "@/components/pieces";
 import { activeHerbFilterCount, emptyHerbFilters, filterHerbs, filtersFromHerbSearch } from "@/data/catalog";
 import { actionLabel, HERB_ACTIONS, regionLabel, symptomLabel } from "@/data/labels";
 import { getChannel } from "@/data/channels";
-import type { Herb, HerbFilters } from "@/data/types";
+import type { Herb, HerbFilters, SymptomId } from "@/data/types";
+
+const CONCERNS: { id: SymptomId; label: string }[] = [
+  { id: "immunity", label: "Colds" },
+  { id: "digestion", label: "Digestion" },
+  { id: "sleep", label: "Sleep" },
+  { id: "energy", label: "Energy" },
+  { id: "womens", label: "Women’s health" },
+  { id: "nausea", label: "Nausea" },
+  { id: "headache", label: "Headache" },
+  { id: "pain", label: "Aches" },
+  { id: "stress", label: "Stress" },
+  { id: "breathing", label: "Breathing" },
+];
 
 export const Route = createFileRoute("/herbs/")({
   validateSearch: (search: Record<string, unknown>) => filtersFromHerbSearch(search),
@@ -36,11 +49,11 @@ function HerbsPage() {
     <main>
       <h1 className="font-serif text-4xl">Herbs</h1>
       <p className="mt-2 text-base leading-relaxed text-muted">
-        A materia medica for study. No shop, no doses. Every entry says not to self-dose.
+        A materia medica in everyday language. Photos show the form people buy. Textbook ranges are for study, not a personal dose.
       </p>
       <div className="mt-4 flex gap-2">
         <div className="min-w-0 flex-1">
-          <SearchField value={filters.q} onChange={(q) => update({ q })} placeholder="Pinyin, English, Latin, action" />
+          <SearchField value={filters.q} onChange={(q) => update({ q })} placeholder="Name, use, or what to buy" />
         </div>
         <FilterButton count={count} onClick={() => setOpen(true)} />
       </div>
@@ -53,6 +66,20 @@ function HerbsPage() {
           ))}
         </div>
       ) : null}
+      <div className="mt-4">
+        <p className="text-sm text-faint">Look up by concern</p>
+        <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
+          {CONCERNS.map((item) => (
+            <Chip
+              key={item.id}
+              active={filters.symptom === item.id}
+              onClick={() => update({ symptom: filters.symptom === item.id ? "" : item.id })}
+            >
+              {item.label}
+            </Chip>
+          ))}
+        </div>
+      </div>
       <p className="mt-4 text-sm text-faint">{herbs.length} herbs</p>
       {herbs.length === 0 ? (
         <div className="mt-3">
@@ -71,7 +98,8 @@ function HerbsPage() {
             if (list.length === 0) return null;
             return (
               <section key={action.id}>
-                <h2 className="mb-2 font-serif text-2xl">{action.label}</h2>
+                <h2 className="font-serif text-2xl">{action.label}</h2>
+                <p className="mb-2 text-sm text-muted">{action.hint}</p>
                 <div className="grid gap-3">
                   {list.map((herb) => (
                     <HerbCard key={herb.id} herb={herb} />

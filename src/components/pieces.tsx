@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Bookmark, ChevronLeft, Search, X } from "lucide-react";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { getChannel } from "@/data/channels";
+import { herbPlain } from "@/data/herb-plain";
 import { ELEMENT_BG, ELEMENT_BORDER, ELEMENT_TEXT, kindLabel, safetyLabel } from "@/data/labels";
 import type { Herb, Point } from "@/data/types";
 import { cn } from "@/lib/cn";
@@ -62,15 +63,32 @@ export function PointCard({ point }: { point: Point }) {
   );
 }
 
-export function HerbCard({ herb }: { herb: Herb }) {
+function HerbThumb({ id }: { id: string }) {
+  const [ok, setOk] = useState(true);
+  if (!ok) return <div className="size-16 shrink-0 rounded-xl bg-panel-2" aria-hidden="true" />;
   return (
-    <Link to="/herbs/$herbId" params={{ herbId: herb.id }} className="block min-h-20 rounded-2xl bg-panel px-4 py-3 shadow-card transition-shadow duration-200 hover:shadow-card-hover">
-      <div className="flex items-baseline justify-between gap-3">
-        <span className="font-serif text-xl leading-none">{herb.pinyin}</span>
-        <span className="font-serif text-lg text-muted">{herb.hanzi}</span>
+    <img
+      src={`${import.meta.env.BASE_URL}herbs/${id}.jpg`}
+      alt=""
+      className="size-16 shrink-0 rounded-xl bg-panel-2 object-cover"
+      onError={() => setOk(false)}
+    />
+  );
+}
+
+export function HerbCard({ herb }: { herb: Herb }) {
+  const note = herbPlain(herb.id)?.short ?? herb.summary;
+  return (
+    <Link to="/herbs/$herbId" params={{ herbId: herb.id }} className="flex min-h-20 items-center gap-3 rounded-2xl bg-panel px-3 py-3 shadow-card transition-shadow duration-200 hover:shadow-card-hover">
+      <HerbThumb id={herb.id} />
+      <div className="min-w-0 flex-1">
+        <div className="flex items-baseline justify-between gap-3">
+          <span className="font-serif text-xl leading-none">{herb.pinyin}</span>
+          <span className="font-serif text-lg text-muted">{herb.hanzi}</span>
+        </div>
+        <p className="mt-1 text-base text-paper">{herb.english}</p>
+        <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted">{note}</p>
       </div>
-      <p className="mt-1 text-base text-paper">{herb.english}</p>
-      <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted">{herb.summary}</p>
     </Link>
   );
 }

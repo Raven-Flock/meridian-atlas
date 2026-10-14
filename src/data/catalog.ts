@@ -1,4 +1,5 @@
 import { CHANNELS, CHANNEL_ORDER, getChannel } from "./channels";
+import { herbPlain } from "./herb-plain";
 import { HERBS } from "./herbs";
 import { actionLabel, elementLabel, kindLabel, regionLabel, symptomLabel } from "./labels";
 import { FILL_POINTS } from "./points-fill";
@@ -102,6 +103,7 @@ function pointBlob(point: Point) {
 }
 
 function herbBlob(herb: Herb) {
+  const plain = herbPlain(herb.id);
   return norm(
     [
       herb.pinyin,
@@ -118,6 +120,13 @@ function herbBlob(herb: Herb) {
       herb.also.map(actionLabel).join(" "),
       herb.symptoms.map(symptomLabel).join(" "),
       herb.channelIds.map((id) => getChannel(id)?.name ?? id).join(" "),
+      plain?.short ?? "",
+      plain?.what ?? "",
+      plain?.feel ?? "",
+      plain?.who ?? "",
+      plain?.buy ?? "",
+      plain?.how ?? "",
+      plain?.range ?? "",
     ].join(" "),
   );
 }

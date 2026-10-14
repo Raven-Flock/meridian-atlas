@@ -2,7 +2,7 @@ import type { Herb } from "./types";
 
 /**
  * Common materia medica, grouped by primary action.
- * Doses are deliberately absent. These are study notes, not a pharmacy.
+ * Plain-language notes and textbook ranges live in herb-plain.ts. They are study notes, not a personal dose.
  * To add a herb, copy an object, keep a unique id, and point `herbIds` on related points at it.
  */
 export const HERBS: Herb[] = [
