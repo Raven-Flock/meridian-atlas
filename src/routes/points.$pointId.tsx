@@ -116,6 +116,20 @@ function PointPage() {
         </p>
       </Section>
 
+      <section className="mt-4 rounded-2xl border border-fire/40 bg-panel px-4 py-4">
+        <h2 className="text-xs tracking-wide text-fire uppercase">Licensed practice only</h2>
+        <p className="mt-2 font-serif text-2xl">Needle depth and angle</p>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          Classroom chart for students, the range schools usually print. A cun is that person’s body inch, not a ruler inch. Charts differ by a little. This is not a technique to copy, and it is not permission to needle yourself.
+        </p>
+        <h3 className="mt-4 text-sm text-faint">Depth</h3>
+        <p className="mt-1 text-base leading-relaxed">{point.needleDepth}</p>
+        <h3 className="mt-4 text-sm text-faint">Angle</h3>
+        <p className="mt-1 text-base leading-relaxed">{point.needleAngle}</p>
+        <h3 className="mt-4 text-sm text-faint">Electroacupuncture</h3>
+        <p className="mt-1 text-base leading-relaxed">{ELECTRO_COPY[point.electro]}</p>
+      </section>
+
       <Section title="Traditionally said to">
         <p className="text-base leading-relaxed text-paper">{point.actions}</p>
       </Section>
@@ -142,20 +156,6 @@ function PointPage() {
         <p className="mt-2 text-sm leading-relaxed text-earth">When not to press: {point.skip}</p>
         <p className="mt-2 text-sm text-faint">About 30–90 seconds is the usual window, unless the step above is shorter. Stop if pain, dizziness, or anything unusual shows up.</p>
       </Section>
-
-      <section className="mt-4 rounded-2xl border border-fire/40 bg-panel px-4 py-4">
-        <h2 className="text-xs tracking-wide text-fire uppercase">Licensed practice only</h2>
-        <p className="mt-2 font-serif text-2xl">Needle depth, angle, electroacupuncture</p>
-        <p className="mt-2 text-sm leading-relaxed text-muted">
-          Textbook language for students. Not instructions. A cun is a body-inch on that person, not a ruler inch. Do not needle yourself.
-        </p>
-        <h3 className="mt-4 text-sm text-faint">Depth</h3>
-        <p className="mt-1 text-base leading-relaxed">{point.needleDepth}</p>
-        <h3 className="mt-4 text-sm text-faint">Angle</h3>
-        <p className="mt-1 text-base leading-relaxed">{point.needleAngle}</p>
-        <h3 className="mt-4 text-sm text-faint">Electroacupuncture</h3>
-        <p className="mt-1 text-base leading-relaxed">{ELECTRO_COPY[point.electro]}</p>
-      </section>
 
       {related.length > 0 ? (
         <Section title="Nearby on this channel">
