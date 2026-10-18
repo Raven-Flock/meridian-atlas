@@ -1,6 +1,6 @@
 import type { Routine } from "./types";
 
-/** Short acupressure sequences. Each step links to a full point page. */
+/** Short acupressure sequences. Each step shows the point on the routine screen. */
 export const ROUTINES: Routine[] = [
   {
     id: "tension-headache",
