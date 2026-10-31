@@ -274,10 +274,10 @@ export const CHANNELS: Channel[] = [
     limb: "Not on the 14 channels",
     clock: null,
     organ: "Extra points",
-    classicalCount: 6,
+    classicalCount: 21,
     themes: ["Well-known points outside the numbered channels", "Clearly labeled so they are not mistaken for meridian points"],
     pathway: "These points do not belong to a primary channel. Each one sits near a channel but keeps its own name.",
-    note: "This atlas includes a short, famous set: Yintang, Anmian, Dingchuan, Taiyang, Sishencong, and Zigong. Many more extra points exist and can be added beside them.",
+    note: "Not part of the 361. This set is the extras students meet often: Yintang, Anmian, Dingchuan, Taiyang, Sishencong, Zigong, Yuyao, Bitong, the ear-apex Erjian (not LI2), Jiaji, Yaoyan, Shiqizhui, Baxie, Sifeng, Yaotongxue, Bafeng, Xiyan, Heding, Lanwei, Dannang, and Jianqian. Many more exist.",
   },
 ];
 

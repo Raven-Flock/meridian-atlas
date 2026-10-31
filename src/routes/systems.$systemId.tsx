@@ -91,9 +91,11 @@ function ChannelPage({ id }: { id: string }) {
       <section className="mt-8">
         <h2 className="font-serif text-2xl">Points in this atlas</h2>
         <p className="mt-1 text-sm text-faint">
-          {points.length === channel.classicalCount
-            ? `All ${channel.classicalCount} classical points.`
-            : `${points.length} of ${channel.classicalCount} classical numbers.`}
+          {channel.id === "extra"
+            ? `${points.length} extra points. Not part of the 361.`
+            : points.length === channel.classicalCount
+              ? `All ${channel.classicalCount} classical points.`
+              : `${points.length} of ${channel.classicalCount} classical numbers.`}
         </p>
         <div className="mt-3 grid gap-3">
           {points.map((point) => (

@@ -32,7 +32,7 @@ function PointsPage() {
       <p className="mt-2 text-base leading-relaxed text-muted">
         {filters.kind === "window"
           ? `Heavenly Gates. ${WINDOW_NOTE} Ten points.`
-          : "Well-known points from the twelve channels, Ren, Du, and a short extra set. The rest of the classical numbers can be added beside them."}
+          : "All 361 classical points on the twelve channels, Ren, and Du, plus extra points students meet often. Extras are labeled so they are not mistaken for channel points."}
       </p>
       <div className="mt-4 flex gap-2">
         <div className="min-w-0 flex-1">

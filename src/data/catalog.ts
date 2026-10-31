@@ -5,8 +5,10 @@ import { actionLabel, elementLabel, kindLabel, regionLabel, symptomLabel } from 
 import { FILL_POINTS } from "./points-fill";
 import { LOWER_POINTS } from "./points-lower";
 import { REST_POINTS } from "./points-rest";
+import { EXTRA_POINTS } from "./points-extra";
 import { UPPER_POINTS } from "./points-upper";
 import { getRoutine, ROUTINES } from "./routines";
+import { tonedPinyin } from "./tones";
 import type { ElectroId, Herb, HerbFilters, Point, PointFilters } from "./types";
 
 /**
@@ -14,7 +16,7 @@ import type { ElectroId, Herb, HerbFilters, Point, PointFilters } from "./types"
  * channel (upper arm, lower/back, or ren-du-extra) with the right `order`.
  * Keep the id stable: saves and links use it.
  */
-export const POINTS: Point[] = [...UPPER_POINTS, ...LOWER_POINTS, ...REST_POINTS, ...FILL_POINTS];
+export const POINTS: Point[] = [...UPPER_POINTS, ...LOWER_POINTS, ...REST_POINTS, ...FILL_POINTS, ...EXTRA_POINTS];
 
 export { CHANNELS, HERBS, ROUTINES, getChannel, getRoutine };
 
@@ -83,6 +85,7 @@ function pointBlob(point: Point) {
     [
       point.code,
       point.pinyin,
+      tonedPinyin(point.id) ?? "",
       point.hanzi,
       point.english,
       point.location,

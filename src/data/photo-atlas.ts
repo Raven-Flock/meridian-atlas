@@ -2,6 +2,13 @@ import type { Point } from "./types";
 
 export type AtlasLabel = { text: string; x: number; y: number };
 export type AtlasGuide = { x1: number; y1: number; x2: number; y2: number; text: string };
+export type AtlasDot = {
+  x: number;
+  y: number;
+  /** Empty string draws the dot with no name chip. */
+  code: string;
+  place?: "above" | "below" | "left" | "right";
+};
 
 export type PhotoMark = {
   plate: string;
@@ -11,6 +18,8 @@ export type PhotoMark = {
   guide?: AtlasGuide;
   note: string;
   hidden?: string;
+  /** When set, every dot is drawn and the single x/y marker is not. */
+  dots?: AtlasDot[];
 };
 
 export type Pathway = {
@@ -104,6 +113,10 @@ const PLATE_LABELS: Record<string, AtlasLabel[]> = {
     { text: "hip", x: 22, y: 36 },
     { text: "thigh", x: 70, y: 68 },
   ],
+  vertex: [
+    { text: "anterior hairline", x: 70, y: 12 },
+    { text: "ear", x: 16, y: 50 },
+  ],
 };
 
 type Pin = {
@@ -173,12 +186,6 @@ const PINS: Record<string, Pin> = {
   li20: { plate: "face", x: 58, y: 59 },
   du26: { plate: "face", x: 50, y: 64, labels: [{ text: "philtrum", x: 70, y: 64 }] },
   gb20: { plate: "side", x: 66, y: 70, labels: [{ text: "skull base", x: 80, y: 62 }] },
-  du20: {
-    plate: "side",
-    x: 52,
-    y: 9,
-    extra: " On the midline of the crown. This side view shows the top of the head.",
-  },
   gb21: { plate: "shoulder", x: 38, y: 14, labels: [{ text: "top of the shoulder muscle", x: 18, y: 24 }] },
   lu1: { plate: "chest", x: 78, y: 62, labels: [{ text: "under the outer collarbone", x: 22, y: 70 }] },
   ren17: {
@@ -213,6 +220,15 @@ const PINS: Record<string, Pin> = {
     y: 46,
     extra: " In the gluteal muscle, one-third of the way from the bony hip toward the tailbone. The shorts cover the exact spot.",
   },
+  heding: { plate: "knee", x: 52, y: 32, extra: " At the midpoint of the top edge of the kneecap." },
+  "erjian-apex": { plate: "side", x: 70, y: 38, extra: " At the tip of the ear, the highest point of the pinna. Not LI2." },
+  jianqian: { plate: "shoulder", x: 48, y: 32, extra: " On the front of the shoulder muscle, midway toward the armpit crease. One side is shown." },
+  shiqizhui: {
+    plate: "low-back",
+    x: 50,
+    y: 72,
+    extra: " On the midline below the 5th lumbar spinous process. The waistband may cover the sacrum, so the dot stays on the low back above the shorts.",
+  },
 };
 
 function num(text: string, pattern: RegExp): number | null {
@@ -237,7 +253,141 @@ function at(x: number, y: number, bounds?: { x: [number, number]; y: [number, nu
 
 type Spot = { plate: string; x: number; y: number; guide?: AtlasGuide; extra?: string; labels?: AtlasLabel[] };
 
+const CROWN_NOTE = " Superior view of the crown, not a side profile. The line across the scalp joins the ear apices. A cun here is that person’s body inch.";
+const CROWN_SIDE = " One side is marked. The other side is the same distance from the midline.";
+
+/** Vertex and nearby scalp points. Coordinates are percent on public/atlas/vertex.jpg. */
+const CROWN: Record<string, Spot> = {
+  du20: {
+    plate: "vertex",
+    x: 50,
+    y: 48,
+    guide: { x1: 18, y1: 48, x2: 82, y2: 48, text: "ear apices" },
+    extra: CROWN_NOTE + " Du20 is the midline crossing of that ear-apex line, 5 cun behind the anterior hairline.",
+  },
+  du21: { plate: "vertex", x: 50, y: 39, extra: CROWN_NOTE + " Du21 is 1.5 cun anterior to Du20, toward the hairline at the top of this photo." },
+  du19: { plate: "vertex", x: 50, y: 57, extra: CROWN_NOTE + " Du19 is 1.5 cun posterior to Du20, toward the nape." },
+  du18: { plate: "vertex", x: 50, y: 66, extra: CROWN_NOTE + " Du18 is 3 cun posterior to Du20, still on the midline before the nape." },
+  du22: { plate: "vertex", x: 50, y: 30, extra: CROWN_NOTE + " Du22 is 2 cun behind the anterior hairline, 3 cun anterior to Du20." },
+  du23: { plate: "vertex", x: 50, y: 24, extra: CROWN_NOTE + " Du23 is 1 cun behind the anterior hairline, on the midline." },
+  bl4: { plate: "vertex", x: 63, y: 21, extra: CROWN_NOTE + CROWN_SIDE + " BL4 is 0.5 cun inside the anterior hairline." },
+  bl5: { plate: "vertex", x: 63, y: 26, extra: CROWN_NOTE + CROWN_SIDE + " BL5 is 1 cun inside the anterior hairline." },
+  bl6: { plate: "vertex", x: 63, y: 33, extra: CROWN_NOTE + CROWN_SIDE + " BL6 is 2.5 cun inside the anterior hairline." },
+  bl7: { plate: "vertex", x: 63, y: 42, extra: CROWN_NOTE + CROWN_SIDE + " BL7 is 4 cun inside the anterior hairline, just anterior to the Du20 level." },
+  bl8: { plate: "vertex", x: 63, y: 51, extra: CROWN_NOTE + CROWN_SIDE + " BL8 is 5.5 cun inside the anterior hairline, just posterior to the Du20 level." },
+  sishencong: { plate: "vertex", x: 50, y: 48, extra: "" },
+};
+
+type GroupFig = { dots: AtlasDot[]; note: string; plate?: string; guide?: AtlasGuide };
+
+/** One catalog entry that is really a pair or a cluster. Every member is marked. */
+const GROUP_FIG: Record<string, GroupFig> = {
+  sishencong: {
+    plate: "vertex",
+    guide: { x1: 18, y1: 48, x2: 82, y2: 48, text: "ear apices" },
+    note:
+      " Superior view. Four extra points, one cun anterior, posterior, and to each side of Du20. The marks are spaced a little wider than one cun so each name can be read. Du20 in the center is the landmark, not one of the four.",
+    dots: [
+      { x: 50, y: 34, code: "Anterior", place: "above" },
+      { x: 50, y: 62, code: "Posterior", place: "below" },
+      { x: 34, y: 48, code: "Left", place: "left" },
+      { x: 66, y: 48, code: "Right", place: "right" },
+      { x: 50, y: 48, code: "Du20", place: "below" },
+    ],
+  },
+  dingchuan: {
+    note: " Both sides are marked, about half a thumb-width lateral to the big vertebra at the base of the neck.",
+    dots: [
+      { x: 43, y: 24, code: "Dingchuan", place: "left" },
+      { x: 57, y: 24, code: "Dingchuan", place: "right" },
+    ],
+  },
+  zigong: {
+    note: " Both sides are marked, about 3 cun lateral to the Ren3 level, on the lower abdomen above the waistband.",
+    dots: [
+      { x: 38, y: 58, code: "Zigong", place: "above" },
+      { x: 64, y: 58, code: "Zigong", place: "above" },
+    ],
+  },
+  taiyang: {
+    note: " This view shows one temple. The other temple has the same hollow, about 1 cun behind the midpoint of the outer eyebrow and the outer corner of the eye.",
+    dots: [{ x: 18, y: 52, code: "Taiyang", place: "above" }],
+  },
+  baxie: {
+    plate: "hand",
+    note: " Four webs on this hand, where the red and white skin meet when the fist is loose. The other hand matches. Eight points in the full set.",
+    dots: [
+      { x: 32, y: 70, code: "1–2", place: "left" },
+      { x: 44, y: 84, code: "2–3", place: "left" },
+      { x: 56, y: 84, code: "3–4", place: "right" },
+      { x: 64, y: 78, code: "4–5", place: "right" },
+    ],
+  },
+  bafeng: {
+    plate: "foot",
+    note: " Four webs on this foot, at the red and white skin. The other foot matches. Eight points in the full set.",
+    dots: [
+      { x: 26, y: 86, code: "1–2", place: "left" },
+      { x: 38, y: 86, code: "2–3", place: "below" },
+      { x: 50, y: 86, code: "3–4", place: "below" },
+      { x: 62, y: 84, code: "4–5", place: "right" },
+    ],
+  },
+  sifeng: {
+    plate: "palm",
+    note: " Four creases on this palm, at the middle joint of the index, middle, ring, and little fingers. The other hand matches. Not the thumb.",
+    dots: [
+      { x: 38, y: 88, code: "Index", place: "left" },
+      { x: 50, y: 92, code: "Middle", place: "below" },
+      { x: 62, y: 88, code: "Ring", place: "right" },
+      { x: 72, y: 84, code: "Little", place: "right" },
+    ],
+  },
+  yaotongxue: {
+    plate: "hand",
+    note: " Both points of the pair, on the back of the hand between the metacarpal bones, closer to the wrist than the webs.",
+    dots: [
+      { x: 40, y: 38, code: "2–3", place: "left" },
+      { x: 62, y: 40, code: "4–5", place: "right" },
+    ],
+  },
+  xiyan: {
+    plate: "knee",
+    note: " Both eyes of the knee, in the hollows beside the patellar ligament. The lateral eye is also ST35. The medial eye is the extra point.",
+    dots: [
+      { x: 42, y: 48, code: "Lateral", place: "left" },
+      { x: 58, y: 46, code: "Medial", place: "right" },
+    ],
+  },
+  yaoyan: {
+    plate: "low-back",
+    note: " Both waist eyes, about 3.5 cun lateral to the lower border of L4. Clothing may cover the exact dimple. Count out from the spine.",
+    dots: [
+      { x: 40, y: 72, code: "Yaoyan", place: "above" },
+      { x: 60, y: 72, code: "Yaoyan", place: "above" },
+    ],
+  },
+  jiaji: {
+    plate: "back",
+    note: " The full set is 34 points, 0.5 cun either side of the spine from T1 through L5. This crop shows the upper pairs. The row continues down the low back at the same distance from the midline.",
+    dots: [
+      { x: 42, y: 26, code: "Jiaji", place: "left" },
+      { x: 58, y: 26, code: "", place: "right" },
+      { x: 42, y: 36, code: "", place: "left" },
+      { x: 58, y: 36, code: "", place: "right" },
+      { x: 42, y: 46, code: "", place: "left" },
+      { x: 58, y: 46, code: "", place: "right" },
+      { x: 42, y: 56, code: "", place: "left" },
+      { x: 58, y: 56, code: "", place: "right" },
+      { x: 42, y: 66, code: "", place: "left" },
+      { x: 58, y: 66, code: "", place: "right" },
+    ],
+  },
+};
+
 function place(point: Point, loc: string): Spot {
+  const crown = CROWN[point.id];
+  if (crown) return crown;
   const pin = PINS[point.id];
   if (pin) return pin;
   if (/sole|plantar/.test(loc) || point.id === "ki1") return { plate: "sole", ...sole(point, loc) };
@@ -271,7 +421,10 @@ function place(point: Point, loc: string): Spot {
   if (point.region === "shoulder-arm" || /cubital|forearm|wrist crease|humeral/.test(loc)) {
     return armSpot(point, loc);
   }
-  if (/vertex|crown|occiput|\btemple\b|\btragus\b|\bmastoid\b|auricle|apex of the ear|behind the ear|outer canthus and the eyebrow/.test(loc)) {
+  if (/vertex|crown|5 cun posterior to the anterior hairline/.test(loc)) {
+    return { plate: "vertex", x: 50, y: 48, extra: CROWN_NOTE };
+  }
+  if (/occiput|\btemple\b|\btragus\b|\bmastoid\b|auricle|apex of the ear|behind the ear|outer canthus and the eyebrow/.test(loc)) {
     return { plate: "side", ...side(point, loc) };
   }
   if (point.region === "ear") return { plate: "side", ...side(point, loc) };
@@ -471,7 +624,7 @@ function face(point: Point, loc: string): { x: number; y: number } {
 
 function side(point: Point, loc: string): { x: number; y: number; extra?: string } {
   if (/vertex|crown|5 cun posterior to the anterior hairline/.test(loc) || point.id === "du20" || point.id === "sishencong") {
-    return { ...at(46, 12), extra: " On the crown. This side view shows the top of the head; the point is on the midline." };
+    return { ...at(50, 44), extra: " On the crown. Use the superior view: midline, on the line between the ear apices." };
   }
   if (/temple|outer canthus and the eyebrow|taiyang/.test(loc) || point.id === "taiyang") return { ...at(22, 42) };
   if (/tragus|condyle|supratragic|intertragic/.test(loc)) return { ...at(48, 54) };
@@ -662,13 +815,19 @@ export function photoMark(point: Point): PhotoMark {
     return { plate: "", x: 50, y: 50, labels: [], note: HIDDEN.du1, hidden: HIDDEN.du1 };
   }
   const spot = place(point, point.location.toLowerCase());
-  const note = NOTE + (spot.extra ?? "");
+  const group = GROUP_FIG[point.id];
+  const plate = group?.plate ?? spot.plate;
+  const dots = group?.dots;
+  const x = dots?.length ? dots[Math.floor(dots.length / 2)].x : spot.x;
+  const y = dots?.length ? dots[Math.floor(dots.length / 2)].y : spot.y;
+  const note = NOTE + (group?.note ?? spot.extra ?? "");
   return {
-    plate: spot.plate,
-    x: spot.x,
-    y: spot.y,
-    labels: labelsFor(spot.plate, spot.x, spot.y, spot.labels),
-    guide: spot.guide,
+    plate,
+    x,
+    y,
+    labels: labelsFor(plate, x, y, spot.labels),
+    guide: group?.guide ?? spot.guide,
+    dots,
     note,
   };
 }

@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { pathwayFor, photoMark, type AtlasGuide, type AtlasLabel } from "@/data/photo-atlas";
+import { pathwayFor, photoMark, type AtlasDot, type AtlasGuide, type AtlasLabel } from "@/data/photo-atlas";
 import type { Point } from "@/data/types";
 
 function atlasSrc(plate: string) {
@@ -62,12 +62,33 @@ function Guide({ guide }: { guide: AtlasGuide }) {
   );
 }
 
+function DotMark({ dot, large }: { dot: AtlasDot; large: boolean }) {
+  const place = dot.place ?? (dot.y < 16 ? "below" : "above");
+  const labelClass = {
+    above: "bottom-full left-1/2 mb-1 -translate-x-1/2",
+    below: "top-full left-1/2 mt-1 -translate-x-1/2",
+    left: "right-full top-1/2 mr-1 -translate-y-1/2",
+    right: "left-full top-1/2 ml-1 -translate-y-1/2",
+  }[place];
+  return (
+    <div className="absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: `${dot.x}%`, top: `${dot.y}%` }}>
+      {dot.code ? (
+        <span className={`absolute whitespace-nowrap rounded bg-ink/85 px-1.5 py-0.5 text-[11px] font-semibold text-paper ${labelClass}`}>
+          {dot.code}
+        </span>
+      ) : null}
+      <span className={`block rounded-full border-2 border-paper bg-earth shadow ${large ? "size-5" : "size-4"}`} />
+    </div>
+  );
+}
+
 export function PointFigure({ point, large = false }: { point: Point; large?: boolean }) {
   const mark = photoMark(point);
   if (mark.hidden) {
     return <p className="rounded-2xl bg-panel p-4 text-sm leading-relaxed text-muted shadow-card">{mark.hidden}</p>;
   }
   const labelBelow = mark.y < 14;
+  const dots = mark.dots?.length ? mark.dots : [{ x: mark.x, y: mark.y, code: point.code, place: labelBelow ? "below" as const : "above" as const }];
   return (
     <div>
       <div className="relative overflow-hidden rounded-2xl bg-ink shadow-card">
@@ -80,14 +101,9 @@ export function PointFigure({ point, large = false }: { point: Point; large?: bo
         {mark.labels.map((label) => (
           <LabelChip key={label.text} label={label} />
         ))}
-        <div className="absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: `${mark.x}%`, top: `${mark.y}%` }}>
-          <span
-            className={`absolute left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-ink/85 px-1.5 py-0.5 text-[11px] font-semibold text-paper ${labelBelow ? "top-full mt-1" : "bottom-full mb-1"}`}
-          >
-            {point.code}
-          </span>
-          <span className={`block rounded-full border-2 border-paper bg-earth shadow ${large ? "size-5" : "size-4"}`} />
-        </div>
+        {dots.map((dot, index) => (
+          <DotMark key={`${dot.code}-${index}`} dot={dot} large={large} />
+        ))}
       </div>
       <p className="mt-2 text-sm leading-relaxed text-muted">{mark.note}</p>
     </div>
