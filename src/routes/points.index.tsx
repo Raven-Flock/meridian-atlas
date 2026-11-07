@@ -25,6 +25,7 @@ function PointsPage() {
   }
 
   const grouped = !filters.q && count === 0;
+  const figure = Boolean(filters.region);
 
   return (
     <main>
@@ -67,7 +68,7 @@ function PointsPage() {
               <h2 className="mb-2 font-serif text-2xl">{group.name}</h2>
               <div className="grid gap-3">
                 {group.points.map((point) => (
-                  <PointCard key={point.id} point={point} />
+                  <PointCard key={point.id} point={point} figure={figure} />
                 ))}
               </div>
             </section>
@@ -76,7 +77,7 @@ function PointsPage() {
       ) : (
         <div className="mt-3 grid gap-3">
           {points.map((point) => (
-            <PointCard key={point.id} point={point} />
+            <PointCard key={point.id} point={point} figure={figure} />
           ))}
         </div>
       )}

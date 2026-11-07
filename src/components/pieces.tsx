@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { PointThumb } from "@/components/locate-figure";
 import { Bookmark, ChevronLeft, Search, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { getChannel } from "@/data/channels";
@@ -36,7 +37,7 @@ export function SearchField({
   );
 }
 
-export function PointCard({ point }: { point: Point }) {
+export function PointCard({ point, figure = false }: { point: Point; figure?: boolean }) {
   const channel = getChannel(point.channelId);
   const element = channel?.element;
   return (
@@ -44,21 +45,23 @@ export function PointCard({ point }: { point: Point }) {
       to="/points/$pointId"
       params={{ pointId: point.id }}
       className={cn(
-        "block min-h-20 rounded-2xl border-l-4 bg-panel px-4 py-3 shadow-card transition-shadow duration-200 hover:shadow-card-hover",
+        "block min-h-20 rounded-2xl border-l-4 bg-panel shadow-card transition-shadow duration-200 hover:shadow-card-hover",
+        figure ? "flex items-center gap-3 px-3 py-3" : "px-4 py-3",
         element ? ELEMENT_BORDER[element] : "border-line",
       )}
     >
-      <div className="flex items-baseline justify-between gap-3">
-        <span className="font-serif text-2xl leading-none">{point.code}</span>
-        <span className={cn("text-sm", element ? ELEMENT_TEXT[element] : "text-faint")}>
-          {channel?.name ?? "Extra"}
-        </span>
+      {figure ? <PointThumb point={point} /> : null}
+      <div className="min-w-0 flex-1">
+        <div className="flex items-baseline justify-between gap-3">
+          <span className="font-serif text-2xl leading-none">{point.code}</span>
+          <span className={cn("text-sm", element ? ELEMENT_TEXT[element] : "text-faint")}>{channel?.name ?? "Extra"}</span>
+        </div>
+        <p className="mt-1 text-base text-paper">{point.english}</p>
+        <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted">{point.summary}</p>
+        {point.safety !== "general" ? (
+          <p className={cn("mt-2 text-xs", point.safety === "pregnancy" ? "text-fire" : "text-earth")}>{safetyLabel(point.safety)}</p>
+        ) : null}
       </div>
-      <p className="mt-1 text-base text-paper">{point.english}</p>
-      <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted">{point.summary}</p>
-      {point.safety !== "general" ? (
-        <p className={cn("mt-2 text-xs", point.safety === "pregnancy" ? "text-fire" : "text-earth")}>{safetyLabel(point.safety)}</p>
-      ) : null}
     </Link>
   );
 }

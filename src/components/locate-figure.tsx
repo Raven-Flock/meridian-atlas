@@ -82,6 +82,35 @@ function DotMark({ dot, large }: { dot: AtlasDot; large: boolean }) {
   );
 }
 
+export function PointThumb({ point }: { point: Point }) {
+  const mark = photoMark(point);
+  if (!mark.plate || mark.hidden) {
+    return (
+      <span className="grid size-20 shrink-0 place-items-center rounded-xl bg-panel-2 text-xs text-faint" aria-hidden="true">
+        —
+      </span>
+    );
+  }
+  const zoom = 2.8;
+  const aspect = mark.plate === "vertex" ? 1 : 0.75;
+  return (
+    <span className="relative size-20 shrink-0 overflow-hidden rounded-xl bg-ink" aria-hidden="true">
+      <img
+        src={atlasSrc(mark.plate)}
+        alt=""
+        className="absolute max-w-none"
+        style={{
+          height: `${zoom * 100}%`,
+          width: `${zoom * aspect * 100}%`,
+          left: `calc(50% - ${(mark.x / 100) * zoom * aspect * 100}%)`,
+          top: `calc(50% - ${(mark.y / 100) * zoom * 100}%)`,
+        }}
+      />
+      <span className="absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-paper bg-earth" />
+    </span>
+  );
+}
+
 export function PointFigure({ point, large = false }: { point: Point; large?: boolean }) {
   const mark = photoMark(point);
   if (mark.hidden) {

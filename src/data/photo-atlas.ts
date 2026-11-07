@@ -229,6 +229,14 @@ const PINS: Record<string, Pin> = {
     y: 72,
     extra: " On the midline below the 5th lumbar spinous process. The waistband may cover the sacrum, so the dot stays on the low back above the shorts.",
   },
+  bl67: { plate: "foot", x: 72, y: 93 },
+  st45: { plate: "foot", x: 40, y: 98 },
+  sp1: { plate: "foot", x: 13, y: 98 },
+  gb44: { plate: "foot", x: 58, y: 96 },
+  lv1: { plate: "foot", x: 20, y: 97 },
+  ki5: { plate: "ankle-in", x: 46, y: 76 },
+  bl9: { plate: "side", x: 70, y: 58, extra: " On the occipital scalp, 2.5 cun above the posterior hairline, 1.3 cun from the midline. One side is shown." },
+  gb19: { plate: "side", x: 66, y: 64, extra: " On the occiput, directly above GB20, level with the upper border of the external occipital prominence." },
 };
 
 function num(text: string, pattern: RegExp): number | null {
@@ -394,12 +402,15 @@ function place(point: Point, loc: string): Spot {
   if (/on the palm|thenar|between the 2nd and 3rd metacarpal|between the 4th and 5th metacarpal/.test(loc) || point.id === "pc8" || point.id === "ht8" || point.id === "lu10") {
     return { plate: "palm", ...palm(point, loc) };
   }
-  if (point.region === "hand" || /snuffbox|metacarpal|nail corner/.test(loc)) {
+  if (
+    point.region !== "foot" &&
+    (point.region === "hand" || /snuffbox|metacarpal/.test(loc) || (/nail corner/.test(loc) && !/toe/.test(loc)))
+  ) {
     return /on the palm|thenar/.test(loc) ? { plate: "palm", ...palm(point, loc) } : { plate: "hand", ...hand(point, loc) };
   }
   if (/popliteal/.test(loc)) return { plate: "popliteal", ...popliteal(point, loc) };
   if (/medial malleolus/.test(loc)) return { plate: "ankle-in", ...ankleIn(loc) };
-  if (/lateral malleolus/.test(loc)) return { plate: "ankle-out", ...ankleOut(loc) };
+  if (/lateral malleolus/.test(loc) && !/between the tendons of extensor/.test(loc)) return { plate: "ankle-out", ...ankleOut(loc) };
   if (/greater trochanter|glute|sacral hiatus|lateral thigh|superior to the popliteal/.test(loc)) {
     return { plate: "hip", ...hip(point, loc) };
   }
@@ -594,9 +605,9 @@ function foot(point: Point, loc: string): { x: number; y: number } {
     return at(16, 86, box);
   }
   if (/web/.test(loc)) return at(30, 76, box);
-  if (/extensor|ankle crease|dorsum of the foot.*ankle|level with the lateral malleolus/.test(loc)) return at(48, 16, box);
   if (/5th metatarsal|4th metatarsal/.test(loc)) return at(58, 52, box);
   if (/metatarsal/.test(loc)) return at(36, 52, box);
+  if (/extensor|ankle crease|dorsum of the foot.*ankle|level with the lateral malleolus/.test(loc)) return at(48, 16, box);
   return at(40, 48, box);
 }
 
