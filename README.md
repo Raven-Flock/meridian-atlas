@@ -1,5 +1,7 @@
 # Meridian Atlas
 
+![Meridian Atlas cover](public/og.jpg)
+
 A calm field guide to acupuncture points, channels, and Chinese herbs. Educational reference only. Not medical advice, and not a substitute for a licensed acupuncturist or physician.
 
 **Open the app:** [raven-flock.github.io/meridian-atlas](https://raven-flock.github.io/meridian-atlas/)
