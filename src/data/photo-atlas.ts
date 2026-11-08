@@ -1,4 +1,5 @@
 import type { Point } from "./types";
+import { POINTS } from "./catalog";
 
 export type AtlasLabel = { text: string; x: number; y: number };
 export type AtlasGuide = { x1: number; y1: number; x2: number; y2: number; text: string };
@@ -210,8 +211,8 @@ const PINS: Record<string, Pin> = {
   bl23: {
     plate: "low-back",
     x: 58,
-    y: 48,
-    labels: [{ text: "level with the waist", x: 74, y: 42 }],
+    y: 38,
+    labels: [{ text: "level with the waist", x: 74, y: 32 }],
   },
   du14: { plate: "back", x: 53, y: 17 },
   gb30: { plate: "hip", x: 42, y: 46, extra: " In the gluteal muscle, one-third of the way from the bony hip toward the tailbone. The shorts cover the exact spot." },
@@ -224,8 +225,8 @@ const PINS: Record<string, Pin> = {
   jianqian: { plate: "shoulder", x: 48, y: 32, extra: " On the front of the shoulder muscle, midway toward the armpit crease. One side is shown." },
   shiqizhui: {
     plate: "low-back",
-    x: 50,
-    y: 72,
+    x: 48,
+    y: 52,
     extra: " On the midline below the 5th lumbar spinous process. The waistband may cover the sacrum, so the dot stays on the low back above the shorts.",
   },
   bl67: { plate: "foot", x: 66, y: 77 },
@@ -249,7 +250,7 @@ const PINS: Record<string, Pin> = {
   bl64: { plate: "foot", x: 64, y: 56 },
   bl65: { plate: "foot", x: 65, y: 70 },
   bl66: { plate: "foot", x: 66, y: 76 },
-  lv7: { plate: "knee", x: 64, y: 62 },
+  lv7: { plate: "knee", x: 66, y: 66 },
   ht1: { plate: "shoulder", x: 52, y: 62 },
   lu11: { plate: "hand", x: 18, y: 60 },
   li1: { plate: "hand", x: 38, y: 82 },
@@ -333,7 +334,7 @@ const GROUP_FIG: Record<string, GroupFig> = {
     dots: [
       { x: 50, y: 34, code: "Anterior", place: "above" },
       { x: 50, y: 62, code: "Posterior", place: "below" },
-      { x: 34, y: 48, code: "Left", place: "left" },
+      { x: 40, y: 48, code: "Left", place: "left" },
       { x: 66, y: 48, code: "Right", place: "right" },
       { x: 50, y: 48, code: "Du20", place: "below" },
     ],
@@ -406,8 +407,8 @@ const GROUP_FIG: Record<string, GroupFig> = {
     plate: "low-back",
     note: " Both waist eyes, about 3.5 cun lateral to the lower border of L4. Clothing may cover the exact dimple. Count out from the spine.",
     dots: [
-      { x: 40, y: 72, code: "Yaoyan", place: "above" },
-      { x: 60, y: 72, code: "Yaoyan", place: "above" },
+      { x: 36, y: 46, code: "Yaoyan", place: "above" },
+      { x: 64, y: 46, code: "Yaoyan", place: "above" },
     ],
   },
   jiaji: {
@@ -577,26 +578,44 @@ function knee(point: Point, loc: string): { x: number; y: number; guide?: AtlasG
   const belowPat = num(loc, /(\d+(?:\.\d+)?) cun below the lower border of the patella/);
   const aboveMal = num(loc, /(\d+(?:\.\d+)?) cun superior to the tip of the (?:medial |lateral )?malleolus/);
   if (belowPat != null) {
-    const lateral = /lateral|finger-breadth|fibula/.test(loc);
+    const fingers = /two finger/.test(loc) ? 2 : /finger-breadth/.test(loc) ? 1 : 0;
+    const lateral = /lateral|fibula/.test(loc) || fingers > 0;
     const medial = /medial/.test(loc) && !lateral;
-    const spot = at(lateral ? 46 : medial ? 70 : 56, 56 + belowPat * 6, box);
-    return { ...spot, guide: { x1: 58, y1: 56, x2: spot.x, y2: spot.y, text: `${belowPat} cun` } };
+    const x = fingers ? 50 - fingers * 4 : lateral ? 46 : medial ? 70 : 56;
+    const spot = at(x, 52 + belowPat * 3.4, box);
+    return { ...spot, guide: { x1: 58, y1: 52, x2: spot.x, y2: spot.y, text: `${belowPat} cun` } };
   }
   if (aboveMal != null) {
     const lateral = /lateral|fibula/.test(loc);
     return { ...at(lateral ? 46 : 66, 56 + (16 - aboveMal) * 5.5, box) };
   }
   if (/head of the fibula|fibular head/.test(loc)) return { ...at(40, 64, box) };
-  if (/medial condyle|medial end/.test(loc)) return { ...at(72, 58, box) };
-  if (/patella/.test(loc)) return { ...at(58, 52, box) };
-  return { ...at(52, 62, box) };
+  if (/medial condyle|medial end/.test(loc)) return { ...at(68, 58, box) };
+  const proximalPat = num(loc, /(\d+(?:\.\d+)?) cun proximal to/);
+  if (proximalPat != null && /patella/.test(loc)) {
+    const lateral = /superolateral|lateral/.test(loc);
+    const medial = /mediosuperior|medial|vastus medialis/.test(loc);
+    return { ...at(lateral ? 44 : medial ? 66 : 54, 50 - proximalPat * 3.2, box) };
+  }
+  if (/lateral to the patellar ligament/.test(loc)) return { ...at(44, 56, box) };
+  if (/patella/.test(loc)) return { ...at(58, 48, box) };
+  const cun = num(loc, /(\d+(?:\.\d+)?) cun/);
+  const down = /inferior|distal|below/.test(loc);
+  const up = /superior|proximal|above/.test(loc);
+  let y = /calf|gastrocnemius/.test(loc) ? 78 : /iliac|thigh|femur|epicondyle/.test(loc) ? 30 : 58;
+  if (cun != null && down) y = 56 + cun * 3;
+  else if (cun != null && up) y = 58 - cun * 3;
+  const lateral = /lateral|fibula|fibular/.test(loc);
+  const medial = /medial|tibia|achilles/.test(loc);
+  const x = /midline/.test(loc) ? 52 : lateral ? 42 : medial ? 66 : 52;
+  return { ...at(x + ((point.order % 3) - 1) * 1.5, y, box) };
 }
 
 function popliteal(point: Point, loc: string): { x: number; y: number } {
   const box = { x: [30, 72] as [number, number], y: [28, 88] as [number, number] };
   if (/midpoint/.test(loc)) return at(48, 46, box);
   if (/lateral end/.test(loc)) return at(32, 44, box);
-  if (/medial/.test(loc)) return at(68, 46, box);
+  if (/medial/.test(loc)) return at(point.channelId === "lv" ? 62 : 70, 46, box);
   const below = num(loc, /(\d+(?:\.\d+)?) cun (?:inferior|distal|below)/);
   if (below != null) return at(48, 46 + below * 5, box);
   return at(48, 46 + (point.order % 5) * 4, box);
@@ -606,13 +625,20 @@ function ankleIn(loc: string): { x: number; y: number; guide?: AtlasGuide; extra
   const box = { x: [30, 70] as [number, number], y: [16, 84] as [number, number] };
   const up = num(loc, /(\d+(?:\.\d+)?) cun superior to the tip of the medial malleolus/);
   if (/between the tip of the medial malleolus and the achilles/.test(loc)) return { ...at(56, 66, box) };
+  if (/3 cun distal to sp9/.test(loc)) return { ...at(44, 24, box) };
   if (up != null) {
-    const spot = at(/posterior/.test(loc) ? 48 : 40, 64 - up * 7, box);
-    return { ...spot, guide: { x1: 42, y1: 64, x2: spot.x, y2: spot.y, text: `${up} cun` } };
+    const x = /posterior/.test(loc) ? 52 : /anterior|medial border/.test(loc) ? 38 : 44;
+    const spot = at(x, 66 - up * 6, box);
+    return { ...spot, guide: { x1: 46, y1: 66, x2: spot.x, y2: spot.y, text: `${up} cun` } };
   }
-  if (/posterior and inferior/.test(loc)) return { ...at(52, 74, box) };
-  if (/anterior/.test(loc)) return { ...at(34, 70, box) };
-  if (/inferior|distal/.test(loc)) return { ...at(40, 76, box) };
+  if (/posterior and inferior/.test(loc)) return { ...at(54, 74, box) };
+  if (/1 cun inferior to ki3/.test(loc)) return { ...at(50, 78, box) };
+  if (/distal to the navicular/.test(loc)) return { ...at(36, 74, box) };
+  if (/midway between sp5|tibialis anterior/.test(loc)) return { ...at(32, 62, box) };
+  if (/distal and inferior to the medial malleolus/.test(loc)) return { ...at(38, 78, box) };
+  if (/1 cun inferior to the prominence/.test(loc)) return { ...at(44, 80, box) };
+  if (/anterior/.test(loc)) return { ...at(34, 68, box) };
+  if (/inferior|distal/.test(loc)) return { ...at(42, 76, box) };
   return { ...at(48, 60, box) };
 }
 
@@ -620,11 +646,13 @@ function ankleOut(loc: string): { x: number; y: number; guide?: AtlasGuide } {
   const box = { x: [36, 72] as [number, number], y: [14, 86] as [number, number] };
   const up = num(loc, /(\d+(?:\.\d+)?) cun superior to the tip of the lateral malleolus/);
   if (/achilles/.test(loc) || /midway between the prominence of the lateral malleolus/.test(loc)) return { ...at(52, 62, box) };
-  if (/anterior and inferior/.test(loc)) return { ...at(50, 72, box) };
-  if (/directly inferior|inferior to the lateral malleolus/.test(loc)) return { ...at(58, 70, box) };
+  if (/anterior and inferior/.test(loc)) return { ...at(46, 72, box) };
+  if (/posterior and inferior/.test(loc)) return { ...at(50, 76, box) };
+  if (/directly inferior/.test(loc)) return { ...at(60, 74, box) };
   if (up != null) {
-    const spot = at(/posterior|fibula/.test(loc) ? 48 : 44, 58 - up * 6.2, box);
-    return { ...spot, guide: { x1: 64, y1: 58, x2: spot.x, y2: spot.y, text: `${up} cun` } };
+    const x = /anterior border/.test(loc) ? 42 : /posterior/.test(loc) ? 56 : 48;
+    const spot = at(x, 62 - up * 6.2, box);
+    return { ...spot, guide: { x1: 60, y1: 62, x2: spot.x, y2: spot.y, text: `${up} cun` } };
   }
   return { ...at(52, 64, box) };
 }
@@ -753,16 +781,18 @@ const UPPER_BONE: Record<string, number> = {
 };
 
 const LOWER_BONE: Record<string, number> = {
-  t9: 14,
-  t10: 20,
+  t9: 20,
+  t10: 23,
   t11: 26,
-  t12: 34,
-  l1: 42,
-  l2: 48,
-  l3: 56,
-  l4: 64,
-  l5: 70,
+  t12: 30,
+  l1: 34,
+  l2: 38,
+  l3: 42,
+  l4: 46,
+  l5: 50,
 };
+
+const SACRAL_Y: Record<string, number> = { "1": 53, "2": 56, "3": 58, "4": 60 };
 
 function backSpot(point: Point, loc: string): Spot {
   const bone = loc.match(/\b(c7|t\d+|l\d+)\b/)?.[1];
@@ -784,8 +814,9 @@ function lateralX(loc: string, point: Point, midlineX: number) {
 function upperBack(point: Point, loc: string): { x: number; y: number; extra?: string } {
   if (/posterior hairline|occipital prominence|spinous process of c1/.test(loc)) {
     const lat = num(loc, /(\d+(?:\.\d+)?) cun lateral/);
+    const y = /occipital prominence/.test(loc) ? 12 : /c1|0\.5 cun/.test(loc) ? 18 : 15;
     return {
-      ...at(50 + (lat ?? 0) * 6, 13, { x: [40, 72], y: [10, 24] }),
+      ...at(50 + (lat ?? 0) * 6, y, { x: [40, 72], y: [10, 24] }),
       extra: " At the base of the skull. The photo shows the nape; count from the midline.",
     };
   }
@@ -797,22 +828,31 @@ function upperBack(point: Point, loc: string): { x: number; y: number; extra?: s
     extra = " Lower on the back than this crop. Count down from the big knob at the base of the neck.";
   }
   if (/scapul|infraspin|suprascapular/.test(loc)) {
-    y = /inferior angle/.test(loc) ? 58 : /spine|suprascapular/.test(loc) ? 32 : 44;
+    if (/inferior to the scapular spine/.test(loc)) y = 38;
+    else if (/centre of the suprascapular|center of the suprascapular/.test(loc)) y = 28;
+    else if (/medial end of the suprascapular/.test(loc)) y = 24;
+    else if (/clavicle and the spine/.test(loc)) y = 22;
+    else y = /inferior angle/.test(loc) ? 58 : /spine|suprascapular/.test(loc) ? 32 : 44;
   }
   const x = lateralX(loc, point, 50);
   return { ...at(x, y, { x: [36, 78], y: [12, 66] }), extra };
 }
 
 function lowBack(point: Point, loc: string, bone: string | undefined, sacral: boolean): { x: number; y: number; extra?: string } {
+  const foramen = loc.match(/(\d)(?:st|nd|rd|th) sacral foramen/);
   let y = bone ? (LOWER_BONE[bone] ?? 48) : 48;
+  if (foramen) y = SACRAL_Y[foramen[1]] ?? 56;
   let extra: string | undefined;
-  if (sacral || /coccyx/.test(loc)) {
-    y = 70;
+  if (/coccyx/.test(loc)) {
+    y = 60;
     extra = " On the sacrum, at the top of the shorts. The clothing covers the cleft. Count the sacral holes down from the waist.";
+  } else if (sacral) {
+    extra = " On the sacrum, above the waistband. Count the sacral holes down from the waist.";
   }
-  const x = lateralX(loc, point, 48);
+  let x = lateralX(loc, point, 48);
+  if (foramen && !/cun lateral/.test(loc)) x = 53;
   if (/12th rib|free end of the 12th/.test(loc)) return { ...at(76, 28, { x: [32, 82], y: [12, 72] }) };
-  return { ...at(x, y, { x: [32, 80], y: [12, 72] }), extra };
+  return { ...at(x, y, { x: [32, 80], y: [18, 62] }), extra };
 }
 
 function hip(point: Point, loc: string): { x: number; y: number; extra?: string } {
@@ -831,6 +871,35 @@ function hip(point: Point, loc: string): { x: number; y: number; extra?: string 
     };
   }
   return { ...at(40, 60, { x: [28, 62], y: [40, 86] }) };
+}
+
+let sharedNudge: Map<string, { x: number; y: number }> | null = null;
+
+/** Locator rules that still land on one coordinate are fanned just enough that each point has its own marker. */
+function nudgeShared(point: Point, plate: string, x: number, y: number) {
+  if (!sharedNudge) {
+    sharedNudge = new Map();
+    const groups = new Map<string, Point[]>();
+    for (const item of POINTS) {
+      const spot = place(item, item.location.toLowerCase());
+      const key = `${spot.plate}|${spot.x.toFixed(1)}|${spot.y.toFixed(1)}`;
+      const list = groups.get(key) ?? [];
+      list.push(item);
+      groups.set(key, list);
+    }
+    for (const list of groups.values()) {
+      if (list.length < 2) continue;
+      list.sort((a, b) => a.code.localeCompare(b.code));
+      list.forEach((item, index) => {
+        const turn = (index / list.length) * Math.PI * 2 - Math.PI / 2;
+        const ring = list.length > 4 ? 3.4 : 2.4;
+        sharedNudge!.set(item.id, { x: Math.cos(turn) * ring, y: Math.sin(turn) * ring * 0.7 });
+      });
+    }
+  }
+  const shift = sharedNudge.get(point.id);
+  if (!shift || plate === "vertex") return { x, y };
+  return { x: Math.min(92, Math.max(8, x + shift.x)), y: Math.min(92, Math.max(8, y + shift.y)) };
 }
 
 function labelsFor(plate: string, x: number, y: number, extra?: AtlasLabel[]) {
@@ -861,11 +930,12 @@ export function photoMark(point: Point): PhotoMark {
     return { plate: "", x: 50, y: 50, labels: [], note: HIDDEN.du1, hidden: HIDDEN.du1 };
   }
   const spot = place(point, point.location.toLowerCase());
+  const nudged = nudgeShared(point, spot.plate, spot.x, spot.y);
   const group = GROUP_FIG[point.id];
   const plate = group?.plate ?? spot.plate;
   const dots = group?.dots;
-  const x = dots?.length ? dots[Math.floor(dots.length / 2)].x : spot.x;
-  const y = dots?.length ? dots[Math.floor(dots.length / 2)].y : spot.y;
+  const x = dots?.length ? dots[Math.floor(dots.length / 2)].x : nudged.x;
+  const y = dots?.length ? dots[Math.floor(dots.length / 2)].y : nudged.y;
   const note = NOTE + (group?.note ?? spot.extra ?? "");
   return {
     plate,

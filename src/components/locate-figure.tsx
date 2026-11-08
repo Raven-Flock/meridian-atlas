@@ -77,7 +77,7 @@ function DotMark({ dot, large }: { dot: AtlasDot; large: boolean }) {
           {dot.code}
         </span>
       ) : null}
-      <span className={`block rounded-full border-2 border-paper bg-earth shadow ${large ? "size-5" : "size-4"}`} />
+      <span className={`block rounded-full border-2 border-paper bg-earth ring-2 ring-paper shadow-[0_0_0_3px_rgba(18,17,14,0.55)] ${large ? "size-5" : "size-4"}`} />
     </div>
   );
 }
@@ -106,7 +106,7 @@ export function PointThumb({ point }: { point: Point }) {
           top: `calc(50% - ${(mark.y / 100) * zoom * 100}%)`,
         }}
       />
-      <span className="absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-paper bg-earth" />
+      <span className="absolute top-1/2 left-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-paper bg-earth ring-1 ring-paper" />
     </span>
   );
 }
