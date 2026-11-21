@@ -5,7 +5,7 @@ import { BodyRegions } from "@/components/diagrams";
 import { HerbCard, PointCard, SearchField, SectionTitle } from "@/components/pieces";
 import { FEATURED_POINT_IDS, getPoint, searchAll } from "@/data/catalog";
 import { SYMPTOMS } from "@/data/labels";
-import { ROUTINES } from "@/data/routines";
+import { ROUTINES, routineMinutes } from "@/data/routines";
 import { emptyPointFilters } from "@/data/catalog";
 
 export const Route = createFileRoute("/")({
@@ -40,7 +40,7 @@ function ExplorePage() {
   return (
     <main>
       <p className="text-sm text-earth">Educational field guide</p>
-      <h1 className="mt-1 max-w-sm font-serif text-4xl leading-tight">Find a point, a channel, or an herb.</h1>
+      <h1 className="mt-1 max-w-sm font-serif text-4xl leading-tight">Find a point, a channel, an herb, or a reflex zone.</h1>
       <p className="mt-2 max-w-md text-base leading-relaxed text-muted">
         Traditional language, in plain words. Pressure only. Nothing here is a diagnosis.
       </p>
@@ -112,6 +112,16 @@ function ExplorePage() {
             <span className="mt-1 text-sm text-muted">The ten Window of Heaven points, studied as gates between the head and the body.</span>
           </Link>
 
+          <Link to="/routines" className="mt-3 flex min-h-20 flex-col justify-center rounded-2xl bg-panel px-4 py-3 shadow-card">
+            <span className="text-base text-paper">Acupressure Routines</span>
+            <span className="mt-1 text-sm text-muted">Short learning sequences. Gentle pressure only. Not a treatment plan.</span>
+          </Link>
+
+          <Link to="/reflexology" className="mt-3 flex min-h-20 flex-col justify-center rounded-2xl bg-panel px-4 py-3 shadow-card">
+            <span className="text-base text-paper">Reflexology</span>
+            <span className="mt-1 text-sm text-muted">Foot and hand zone maps in the Western educational layout. A reference, not a treatment.</span>
+          </Link>
+
           <section className="mt-8">
             <SectionTitle
               aside={
@@ -120,14 +130,17 @@ function ExplorePage() {
                 </Link>
               }
             >
-              Self-care routines
+              Acupressure Routines
             </SectionTitle>
             <div className="no-scrollbar flex gap-3 overflow-x-auto pb-1">
               {ROUTINES.map((routine) => (
                 <Link key={routine.id} to="/routines/$routineId" params={{ routineId: routine.id }} className="w-56 shrink-0 rounded-2xl bg-panel p-4 shadow-card">
                   <ListChecks className="size-5 text-earth" />
                   <p className="mt-3 font-serif text-xl leading-tight">{routine.title}</p>
-                  <p className="mt-2 line-clamp-3 text-sm text-muted">{routine.aim}</p>
+                  <p className="mt-1 text-xs text-faint">
+                    {routine.steps.length} points · {routineMinutes(routine)} min
+                  </p>
+                  <p className="mt-2 line-clamp-3 text-sm text-muted">{routine.focus}</p>
                 </Link>
               ))}
             </div>

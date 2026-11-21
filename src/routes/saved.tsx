@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { HerbCard, PointCard } from "@/components/pieces";
 import { getHerb, getPoint } from "@/data/catalog";
+import { getZone, systemLabel } from "@/data/reflexology";
+import { useReflexStudied } from "@/lib/reflex-studied";
 import { useSaved } from "@/lib/saved";
 
 export const Route = createFileRoute("/saved")({
@@ -9,6 +11,8 @@ export const Route = createFileRoute("/saved")({
 
 function SavedPage() {
   const saved = useSaved();
+  const studiedIds = useReflexStudied();
+  const studied = studiedIds.map((id) => getZone(id)).filter((zone) => zone != null);
   const points = saved.points.map((id) => getPoint(id)).filter((point) => point != null);
   const herbs = saved.herbs.map((id) => getHerb(id)).filter((herb) => herb != null);
   const recent = saved.recent
@@ -22,7 +26,7 @@ function SavedPage() {
     })
     .filter((item) => item != null);
 
-  const empty = points.length === 0 && herbs.length === 0 && recent.length === 0;
+  const empty = points.length === 0 && herbs.length === 0 && recent.length === 0 && studied.length === 0;
 
   return (
     <main>
@@ -68,6 +72,31 @@ function SavedPage() {
           <div className="mt-3 grid gap-3">
             {herbs.map((herb) => (
               <HerbCard key={herb.id} herb={herb} />
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section className="mt-6">
+        <h2 className="font-serif text-2xl">Reflex zones studied</h2>
+        {studied.length === 0 ? (
+          <p className="mt-2 text-sm text-faint">No reflex zones marked on this device.</p>
+        ) : (
+          <div className="mt-3 grid gap-2">
+            {studied.map((zone) => (
+              <Link
+                key={zone.id}
+                to="/reflexology"
+                className="flex min-h-11 items-center justify-between gap-3 rounded-xl bg-panel px-3 py-2 shadow-card"
+              >
+                <span>
+                  <span className="block text-base text-paper">{zone.name}</span>
+                  <span className="mt-0.5 block text-sm text-faint">
+                    {zone.view === "foot" ? "Foot" : "Hand"} · {zone.organs.join(", ")}
+                  </span>
+                </span>
+                <span className="text-xs tracking-wide text-earth uppercase">{systemLabel(zone.system)}</span>
+              </Link>
             ))}
           </div>
         )}

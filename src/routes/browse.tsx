@@ -99,8 +99,8 @@ function Symptoms() {
         ))}
         <li>
           <Link to="/routines" className="block min-h-16 rounded-2xl bg-panel px-4 py-3 shadow-card">
-            <span className="block text-base">Short routines</span>
-            <span className="text-sm text-muted">{ROUTINES.length} sequences with timing</span>
+            <span className="block text-base">Acupressure routines</span>
+            <span className="text-sm text-muted">{ROUTINES.length} short sequences, pressure only</span>
           </Link>
         </li>
       </ul>

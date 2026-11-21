@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BrowseRouteImport } from './routes/browse'
 import { Route as GlossaryRouteImport } from './routes/glossary'
+import { Route as ReflexologyRouteImport } from './routes/reflexology'
 import { Route as SavedRouteImport } from './routes/saved'
 import { Route as HerbsIndexRouteImport } from './routes/herbs.index'
 import { Route as HerbsHerbIdRouteImport } from './routes/herbs.$herbId'
@@ -35,6 +36,11 @@ const BrowseRoute = BrowseRouteImport.update({
 const GlossaryRoute = GlossaryRouteImport.update({
   id: '/glossary',
   path: '/glossary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReflexologyRoute = ReflexologyRouteImport.update({
+  id: '/reflexology',
+  path: '/reflexology',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SavedRoute = SavedRouteImport.update({
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
   '/glossary': typeof GlossaryRoute
+  '/reflexology': typeof ReflexologyRoute
   '/saved': typeof SavedRoute
   '/herbs/$herbId': typeof HerbsHerbIdRoute
   '/points/$pointId': typeof PointsPointIdRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
   '/glossary': typeof GlossaryRoute
+  '/reflexology': typeof ReflexologyRoute
   '/saved': typeof SavedRoute
   '/herbs/$herbId': typeof HerbsHerbIdRoute
   '/points/$pointId': typeof PointsPointIdRoute
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/browse': typeof BrowseRoute
   '/glossary': typeof GlossaryRoute
+  '/reflexology': typeof ReflexologyRoute
   '/saved': typeof SavedRoute
   '/herbs/$herbId': typeof HerbsHerbIdRoute
   '/points/$pointId': typeof PointsPointIdRoute
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/'
     | '/browse'
     | '/glossary'
+    | '/reflexology'
     | '/saved'
     | '/herbs/$herbId'
     | '/points/$pointId'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/'
     | '/browse'
     | '/glossary'
+    | '/reflexology'
     | '/saved'
     | '/herbs/$herbId'
     | '/points/$pointId'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/'
     | '/browse'
     | '/glossary'
+    | '/reflexology'
     | '/saved'
     | '/herbs/$herbId'
     | '/points/$pointId'
@@ -175,6 +187,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BrowseRoute: typeof BrowseRoute
   GlossaryRoute: typeof GlossaryRoute
+  ReflexologyRoute: typeof ReflexologyRoute
   SavedRoute: typeof SavedRoute
   HerbsHerbIdRoute: typeof HerbsHerbIdRoute
   PointsPointIdRoute: typeof PointsPointIdRoute
@@ -207,6 +220,13 @@ declare module '@tanstack/react-router' {
       path: '/glossary'
       fullPath: '/glossary'
       preLoaderRoute: typeof GlossaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reflexology': {
+      id: '/reflexology'
+      path: '/reflexology'
+      fullPath: '/reflexology'
+      preLoaderRoute: typeof ReflexologyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/saved': {
@@ -279,6 +299,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BrowseRoute: BrowseRoute,
   GlossaryRoute: GlossaryRoute,
+  ReflexologyRoute: ReflexologyRoute,
   SavedRoute: SavedRoute,
   HerbsHerbIdRoute: HerbsHerbIdRoute,
   PointsPointIdRoute: PointsPointIdRoute,

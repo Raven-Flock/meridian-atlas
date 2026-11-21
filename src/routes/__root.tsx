@@ -12,7 +12,7 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: APP_NAME },
-      { name: "description", content: "A calm field guide to acupuncture points, channels, and Chinese herbs. Educational reference only." },
+      { name: "description", content: "A calm field guide to acupuncture points, channels, Chinese herbs, and reflexology zones. Educational reference only." },
       { name: "theme-color", content: "#12110e" },
     ],
     links: [

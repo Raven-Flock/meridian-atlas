@@ -87,6 +87,13 @@ summary,
   transition: box-shadow 180ms ease;
 }
 
+.tab-label {
+  font-size: 0.625rem;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  text-align: center;
+}
+
 @media (hover: hover) {
   button:hover,
   a.rounded-full:hover,

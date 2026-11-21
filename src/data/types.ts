@@ -140,16 +140,21 @@ export type Herb = {
   tags: string[];
 };
 
+export type RoutineTag = "stress" | "sleep" | "digestion" | "head" | "energy" | "neck" | "back" | "morning" | "evening";
+
 export type RoutineStep = {
   pointId: string;
   seconds: number;
   how: string;
+  tradition: string;
 };
 
 export type Routine = {
   id: string;
   title: string;
+  focus: string;
   aim: string;
+  tags: RoutineTag[];
   steps: RoutineStep[];
 };
 

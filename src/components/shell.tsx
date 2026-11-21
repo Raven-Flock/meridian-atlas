@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Bookmark, BookOpen, Compass, Leaf, MapPinned, Waypoints } from "lucide-react";
+import { Bookmark, BookOpen, Compass, Footprints, Leaf, ListChecks, MapPinned, Waypoints } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { DISCLAIMER } from "@/data/labels";
 import { acceptDisclaimer, useSaved } from "@/lib/saved";
@@ -10,14 +10,16 @@ const TABS = [
   { id: "points", to: "/points", label: "Points", icon: MapPinned },
   { id: "herbs", to: "/herbs", label: "Herbs", icon: Leaf },
   { id: "systems", to: "/systems", label: "Systems", icon: Waypoints },
-  { id: "saved", to: "/saved", label: "Saved", icon: Bookmark },
+  { id: "routines", to: "/routines", label: "Routines", icon: ListChecks },
+  { id: "reflexology", to: "/reflexology", label: "Reflexology", icon: Footprints },
 ] as const;
 
 function tabFor(path: string) {
   if (path.startsWith("/points")) return "points";
   if (path.startsWith("/herbs")) return "herbs";
   if (path.startsWith("/systems")) return "systems";
-  if (path.startsWith("/saved")) return "saved";
+  if (path.startsWith("/routines")) return "routines";
+  if (path.startsWith("/reflexology")) return "reflexology";
   return "explore";
 }
 
@@ -37,17 +39,30 @@ export function Shell({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-ink text-paper">
       <header className="sticky top-0 z-20 border-b border-line/80 bg-ink/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-          <Link to="/" className="group flex min-h-11 items-center gap-3">
+          <Link to="/" className="group flex min-h-11 min-w-0 items-center gap-3">
             <Mark />
-            <span>
+            <span className="min-w-0">
               <span className="block font-serif text-xl leading-none tracking-tight">Meridian Atlas</span>
-              <span className="mt-1 block text-xs tracking-wide text-faint uppercase">Channels, points, herbs</span>
+              <span className="mt-1 block text-xs leading-snug text-faint">Points, channels, herbs & reflexology</span>
             </span>
           </Link>
-          <Link to="/glossary" className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted">
-            <BookOpen className="size-4" strokeWidth={1.75} />
-            Glossary
-          </Link>
+          <div className="flex items-center">
+            <Link
+              to="/saved"
+              aria-label="Saved"
+              aria-current={path.startsWith("/saved") ? "page" : undefined}
+              className={cn(
+                "inline-flex size-11 items-center justify-center",
+                path.startsWith("/saved") ? "text-paper" : "text-muted",
+              )}
+            >
+              <Bookmark className="size-5" strokeWidth={path.startsWith("/saved") ? 2.25 : 1.75} />
+            </Link>
+            <Link to="/glossary" className="inline-flex min-h-11 items-center gap-1.5 px-1 text-sm text-muted">
+              <BookOpen className="size-4" strokeWidth={1.75} />
+              Glossary
+            </Link>
+          </div>
         </div>
       </header>
       <div className="mx-auto w-full max-w-3xl px-4 pt-4 pb-36">
@@ -80,23 +95,23 @@ export function Shell({ children }: { children: ReactNode }) {
           </p>
         </footer>
       </div>
-      <nav className="tabbar fixed inset-x-0 bottom-0 z-30 border-t border-line bg-ink/95 backdrop-blur-md" aria-label="Primary">
-        <ul className="mx-auto grid max-w-3xl grid-cols-5">
+      <nav className="tabbar fixed inset-x-0 bottom-0 z-30 overflow-x-auto border-t border-line bg-ink/95 no-scrollbar backdrop-blur-md" aria-label="Primary">
+        <ul className="mx-auto flex min-w-full max-w-3xl">
           {TABS.map((tab) => {
             const Icon = tab.icon;
             const on = active === tab.id;
             return (
-              <li key={tab.id}>
+              <li key={tab.id} className="flex-1">
                 <Link
                   to={tab.to}
                   aria-current={on ? "page" : undefined}
                   className={cn(
-                    "flex min-h-14 flex-col items-center justify-center gap-1 text-xs",
+                    "flex min-h-14 flex-col items-center justify-center gap-1 px-1",
                     on ? "text-paper" : "text-faint",
                   )}
                 >
                   <Icon className="size-5" strokeWidth={on ? 2.25 : 1.75} />
-                  {tab.label}
+                  <span className="tab-label whitespace-nowrap">{tab.label}</span>
                 </Link>
               </li>
             );
